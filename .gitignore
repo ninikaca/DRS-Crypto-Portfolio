@@ -1,0 +1,55 @@
+# Ignore virtual environment files for Flask API
+/backend/virtualpy/
+__pycache__/
+
+# Ignore the virtual environment for React app
+/frontend/node_modules/
+/frontend/yarn-error.log
+/frontend/.yarn-integrity
+/frontend/.pnp.js
+
+# Ignore build and generated files
+/frontend/build/
+/frontend/dist/
+
+# Ignore development and configuration files
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+# Ignore user-specific files
+/frontend/.cache/
+/frontend/.eslintcache
+/frontend/.git
+/frontend/.idea/
+/frontend/.vscode/
+/frontend/*.log
+/frontend/.DS_Store
+/frontend/.project
+/frontend/.pyc
+/frontend/*.pyo
+/frontend/__pycache__/
+/frontend/.pytest_cache/
+/frontend/coverage/
+/frontend/.nyc_output/
+/frontend/public/
+/frontend/package-lock.json
+/frontend/yarn.lock
+/frontend/.coverage
+/frontend/coverage
+/frontend/coverage-final.json
+/frontend/test-results.xml
+/frontend/lambda-package/
+
+# Ignore temporary and backup files
+/frontend/*~
+/frontend/#*
+/frontend/.#*
+
+# Ignore environment-specific files
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
