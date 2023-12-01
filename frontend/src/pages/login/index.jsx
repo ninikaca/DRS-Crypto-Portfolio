@@ -3,17 +3,12 @@ import axios from 'axios';
 import { proveri_sesiju, kreiraj_sesiju, zavrsi_sesiju } from '../../session/session-manager';
 import { useNavigate } from 'react-router-dom';
 
-const RegisterForm = () => {
+const Prijava = () => {
   const [formData, setFormData] = useState({
-    ime: '',
-    prezime: '',
-    adresa: '',
-    grad: '',
-    drzava: '',
-    telefon: '',
     email: '',
     lozinka: ''
   });
+
   const navigate = useNavigate();
   const [poruka, setPoruka] = useState('');
   const [greska, setGreska] = useState('');
@@ -38,17 +33,17 @@ const RegisterForm = () => {
 
     // AXIOS POZIV KA APIJU
     try {
-      const response = await axios.post('http://localhost:5000/api/korisnici/kreiraj', formData, {
+      const response = await axios.post('http://localhost:5000/api/korisnici/prijava', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         setPoruka(response.data.data);
 
         // cuva trenutno prijavljen korisnik se u localstorage
-        console.log(kreiraj_sesiju(formData.email, formData.password));
+        kreiraj_sesiju(formData.email, formData.password);
         window.location.reload(); // navigate('/'); // promeni posle u konkretnu stranicu tipa navigate('/pocetna');
 
       } else {
@@ -71,8 +66,6 @@ const RegisterForm = () => {
 
   useEffect(() => {
     setKorisnik(proveri_sesiju()); //  korisnik iz local storage
-
-
   }, [])
 
   return (
@@ -88,88 +81,10 @@ const RegisterForm = () => {
 
         :
         <div>
-          <a href='/prijava' className="link">
-            Prijava
+          <a href='/' className="link">
+            Registracija
           </a>
           <form onSubmit={handleSubmit} className='container'>
-            <div className="field">
-              <label className="label">Ime:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  name="ime"
-                  value={formData.ime}
-                  onChange={handleChange}
-                  placeholder="Enter your first name"
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Prezime:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  name="prezime"
-                  value={formData.prezime}
-                  onChange={handleChange}
-                  placeholder="Enter your last name"
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Adresa:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  name="adresa"
-                  value={formData.adresa}
-                  onChange={handleChange}
-                  placeholder="Enter your address"
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Grad:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  name="grad"
-                  value={formData.grad}
-                  onChange={handleChange}
-                  placeholder="Enter your city"
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Država:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  name="drzava"
-                  value={formData.drzava}
-                  onChange={handleChange}
-                  placeholder="Enter your country"
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Telefon:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  name="telefon"
-                  value={formData.telefon}
-                  onChange={handleChange}
-                  placeholder="Enter your phone number"
-                />
-              </div>
-            </div>
             <div className="field">
               <label className="label">Email:</label>
               <div className="control">
@@ -206,7 +121,7 @@ const RegisterForm = () => {
             <div className="field mt-2">
               <div className="control">
                 <button className="button is-info" type="submit">
-                  Register
+                  Prijava
                 </button>
               </div>
             </div>
@@ -218,4 +133,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default Prijava;
