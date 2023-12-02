@@ -5,7 +5,7 @@ from routes.korisnik import korisnici_blueprint
 
 app = Flask(__name__)
 
-CORS(app, origins=["http://localhost:3000"], resources={r"/api/*": {"origins": "http://localhost:3000"}}, methods=["POST", "GET", "PUT", "DELETE"])
+CORS(app, origins= "*", methods=["POST", "GET", "PUT", "DELETE"])
 
 app.config.from_pyfile('config.py')
 

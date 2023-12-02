@@ -14,4 +14,18 @@ class Korisnik(Base):
     email = Column(String(255), nullable=False, unique=True)
     lozinka = Column(String(255), nullable=False)
 
+    def serialize(self):
+        return {
+            "id":self.id,
+            "ime":self.ime,
+            "prezime":self.prezime,
+            "adresa":self.adresa,
+            "grad":self.grad,
+            "drzava":self.drzava,
+            "telefon":self.telefon,
+            "email":self.email,
+            "lozinka":self.lozinka
+        }
+        
+
 Base.metadata.create_all(engine)

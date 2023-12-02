@@ -3,8 +3,9 @@ import axios from 'axios';
 import { proveri_sesiju, kreiraj_sesiju, zavrsi_sesiju } from '../../session/session-manager';
 import { useNavigate } from 'react-router-dom';
 
-const Registracija = () => {
+const Izmena = () => {
   const [formData, setFormData] = useState({
+    id: '',
     ime: '',
     prezime: '',
     adresa: '',
@@ -17,7 +18,7 @@ const Registracija = () => {
   const navigate = useNavigate();
   const [poruka, setPoruka] = useState('');
   const [greska, setGreska] = useState('');
-  const [korisnik, setKorisnik] = useState({});
+  const [ucitanKorisnik, setUcitanKorisnik] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,19 +39,14 @@ const Registracija = () => {
 
     // AXIOS POZIV KA APIJU
     try {
-      const response = await axios.post('http://localhost:5000/api/korisnici/kreiraj', formData, {
+      const response = await axios.post('http://localhost:5000/api/korisnici/izmeni', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         setPoruka(response.data.data);
-
-        // cuva trenutno prijavljen korisnik se u localstorage
-        console.log(kreiraj_sesiju(formData.email, formData.password));
-        window.location.reload(); // navigate('/'); // promeni posle u konkretnu stranicu tipa navigate('/pocetna');
-
       } else {
         setGreska(response.data.data); // axiosresponse ima request, response, data,
         // kako smo mi slali jsonify({data: poruka}), bice respone.data pa nas data response.data.data
@@ -70,27 +66,48 @@ const Registracija = () => {
   };
 
   useEffect(() => {
-    setKorisnik(proveri_sesiju()); //  korisnik iz local storage
+    
 
+    async function fetch_user() {
+      try {
+        let korisnik = proveri_sesiju(); //  korisnik iz local storage
 
+        if(korisnik == null)
+        {
+            return false;
+        }
+        const response = await axios.post('http://localhost:5000/api/korisnici/pribavi', {email: korisnik.email }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          setUcitanKorisnik(response.data.data)
+          setFormData(response.data.data)
+          return true;
+        }
+        else {
+          setUcitanKorisnik(null)
+          return false;
+        }
+      }
+      catch (error) {
+        setUcitanKorisnik(null)
+        return false;
+      }
+    }
+
+    if (fetch_user() === false) {
+      odjava()
+    }
   }, [])
 
   return (
     <div>
       {/* ternarni operator, uslovno renderovanje, osnove reactjs --> google or ig posts */}
-      {korisnik != null ?
+      {ucitanKorisnik != null &&
         <div>
-          <h1>Cao, {korisnik.email}!</h1>
-          <button className="button is-danger" onClick={odjava}>
-            Logout
-          </button>
-        </div>
-
-        :
-        <div>
-          <a href='/prijava' className="link">
-            Prijava
-          </a>
           <form onSubmit={handleSubmit} className='container'>
             <div className="field">
               <label className="label">Ime:</label>
@@ -206,7 +223,7 @@ const Registracija = () => {
             <div className="field mt-2">
               <div className="control">
                 <button className="button is-info" type="submit">
-                  Register
+                  Save
                 </button>
               </div>
             </div>
@@ -218,4 +235,4 @@ const Registracija = () => {
   );
 };
 
-export default Registracija;
+export default Izmena;
