@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { check_session, end_session } from '../../session/session-manager';
 import LoginData from '../../interfaces/ILogin';
 import IRegistration from '../../interfaces/IRegistration';
