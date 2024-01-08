@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react"
-import { proveri_sesiju, zavrsi_sesiju } from "../../session/session-manager"
+import { check_session, end_session } from "../../session/session-manager";
 import axios from "axios";
+import LoginData from "../../interfaces/ILogin";
+import React from "react";
 
 const Navbar = () => {
-    const [trenutni, setTrenutni] = useState(null);
-    const [loading, setLoading] = useState(true);
-
+    const [current, setCurrent] = useState<LoginData | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         setLoading(true)
-        async function proveri() {
+        async function check() {
             try {
-                let korisnik = proveri_sesiju()
-                if(korisnik == null)
+                const user:LoginData | null = check_session();
+                if(user == null)
                     return false
-                setTrenutni(korisnik)
-                const response = await axios.post('http://localhost:5000/api/korisnici/prijava', {email:korisnik.email, lozinka:korisnik.lozinka}, {
+                    setCurrent(user)
+                const response = await axios.post('http://localhost:5000/api/users/login', {email:user.email, password:user.password}, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -30,7 +31,7 @@ const Navbar = () => {
             }
         }
 
-        proveri()
+        check()
         setLoading(false)
     }, [])
     return (
@@ -76,23 +77,23 @@ const Navbar = () => {
                     </div>
                     <div className="navbar-end">
                         <div className="navbar-item">
-                            {trenutni == null ?
+                            {current == null ?
 
                                 <div className="buttons">
-                                    <a href="/registracija" className="button is-primary">
-                                        <strong>Registracija</strong>
+                                    <a href="/registration" className="button is-primary">
+                                        <strong>Registration</strong>
                                     </a>
-                                    <a href="/prijava" className="button is-light">Prijavi se</a>
+                                    <a href="/login" className="button is-light">Log In</a>
                                 </div>
                                 : 
                                 <div>
                                     <div className="buttons">
-                                    <h1>Dobrodošli, {trenutni.email}</h1>
-                                    <button onClick={() => {zavrsi_sesiju(); window.location.href = "/"}} className="button is-danger ml-2">
-                                        <strong>Odjavi se</strong>
+                                    <h1>Welcome, {current.email}</h1>
+                                    <button onClick={() => {end_session(); window.location.href = "/"}} className="button is-danger ml-2">
+                                        <strong>Log Out</strong>
                                     </button>
                                     </div>
-                                    </div>}
+                                </div>}
                         </div>
                     </div>
                 </div>

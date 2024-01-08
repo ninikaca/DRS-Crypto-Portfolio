@@ -1,170 +1,199 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { proveri_sesiju, kreiraj_sesiju, zavrsi_sesiju } from '../../session/session-manager';
-import { useNavigate } from 'react-router-dom';
+import React, { FormEvent, useEffect, useState } from 'react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { check_session, end_session } from '../../session/session-manager';
+import LoginData from '../../interfaces/ILogin';
+import IRegistration from '../../interfaces/IRegistration';
 
-const Registracija = () => {
-  const [formData, setFormData] = useState({
-    ime: '',
-    prezime: '',
-    adresa: '',
-    grad: '',
-    drzava: '',
-    telefon: '',
+const Change = (): React.JSX.Element => {
+  const defaultData: IRegistration = {
+    id: '',
+    name: '',
+    surname: '',
+    address: '',
+    city: '',
+    country: '',
+    number: '',
     email: '',
-    lozinka: ''
-  });
-  const navigate = useNavigate();
-  const [poruka, setPoruka] = useState('');
-  const [greska, setGreska] = useState('');
-  const [korisnik, setKorisnik] = useState({});
+    password: ''
+  }
+  const [formData, setFormData] = useState<IRegistration>(defaultData);
+  const [message, setMessage] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [loadedUser, setLoadedUser] = useState<LoginData | null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  function odjava() {
-    zavrsi_sesiju();
-    window.location.reload(); // ne znam sto ne radi navigate('/') ....
+  function logout() {
+    end_session();
+    window.location.reload(); // return to homepage
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     // resetovanje greske i poruke
-    setPoruka('');
-    setGreska('');
+    setMessage('');
+    setError('');
 
     // AXIOS POZIV KA APIJU
     try {
-      const response = await axios.post('http://localhost:5000/api/korisnici/kreiraj', formData, {
+      const response: AxiosResponse = await axios.post('http://localhost:5000/api/users/edit', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (response.status === 201) {
-        setPoruka(response.data.data);
-
-        // cuva trenutno prijavljen korisnik se u localstorage
-        console.log(kreiraj_sesiju(formData.email, formData.password));
-        window.location.reload(); // navigate('/'); // promeni posle u konkretnu stranicu tipa navigate('/pocetna');
-
+      if (response.status === 200) {
+        setMessage(response.data.data);
       } else {
-        setGreska(response.data.data); // axiosresponse ima request, response, data,
+        setError(response.data.data); // axiosresponse ima request, response, data,
         // kako smo mi slali jsonify({data: poruka}), bice respone.data pa nas data response.data.data
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.response) {
         // The request was made and the server responded with a status code that falls out of the range of 2xx
-        setGreska(error.response.data.data); // Axios response has request, response, data properties
+        setError(error.response.data.data); // Axios response has request, response, data properties
       } else if (error.request) {
         // The request was made but no response was received
-        setGreska('No response received from the server');
+        setError('No response received from the server');
       } else {
         // Something happened in setting up the request that triggered an error
-        setGreska(error.message);
+        setError(error.message);
       }
     }
   };
 
   useEffect(() => {
-    setKorisnik(proveri_sesiju()); //  korisnik iz local storage
 
+    async function fetch_user(): Promise<boolean> {
+      try {
+        let user = check_session(); //  korisnik iz local storage
 
+        if (user == null) {
+          return false;
+        }
+        const response = await axios.post('http://localhost:5000/api/users/get', { email: user.email }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          setLoadedUser(response.data.data)
+          setFormData(response.data.data)
+          return true;
+        }
+        else {
+          setLoadedUser(null)
+          return false;
+        }
+      }
+      catch (error) {
+        setLoadedUser(null)
+        return false;
+      }
+    }
+
+    async function handleUserFetchAndLogout(): Promise<void> {
+      try {
+        const userFetched: boolean = await fetch_user();
+
+        if (userFetched === false) {
+          logout();
+        }
+      } catch (error) {
+        // Handle errors, if any, during the user fetch process
+        console.error("Error fetching user:", error);
+        logout(); // Log out the user in case of an error during fetch
+      }
+    }
+
+    // Call the function to initiate the process
+    handleUserFetchAndLogout();
   }, [])
 
   return (
     <div>
       {/* ternarni operator, uslovno renderovanje, osnove reactjs --> google or ig posts */}
-      {korisnik != null ?
+      {loadedUser != null &&
         <div>
-          <h1>Cao, {korisnik.email}!</h1>
-          <button className="button is-danger" onClick={odjava}>
-            Logout
-          </button>
-        </div>
-
-        :
-        <div>
-          <a href='/prijava' className="link">
-            Prijava
-          </a>
           <form onSubmit={handleSubmit} className='container'>
             <div className="field">
-              <label className="label">Ime:</label>
+              <label className="label">Name:</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  name="ime"
-                  value={formData.ime}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter your first name"
                 />
               </div>
             </div>
             <div className="field">
-              <label className="label">Prezime:</label>
+              <label className="label">Surname:</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  name="prezime"
-                  value={formData.prezime}
+                  name="surname"
+                  value={formData.surname}
                   onChange={handleChange}
                   placeholder="Enter your last name"
                 />
               </div>
             </div>
             <div className="field">
-              <label className="label">Adresa:</label>
+              <label className="label">Address:</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  name="adresa"
-                  value={formData.adresa}
+                  name="address"
+                  value={formData.address}
                   onChange={handleChange}
                   placeholder="Enter your address"
                 />
               </div>
             </div>
             <div className="field">
-              <label className="label">Grad:</label>
+              <label className="label">City:</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  name="grad"
-                  value={formData.grad}
+                  name="city"
+                  value={formData.city}
                   onChange={handleChange}
                   placeholder="Enter your city"
                 />
               </div>
             </div>
             <div className="field">
-              <label className="label">Država:</label>
+              <label className="label">Country:</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  name="drzava"
-                  value={formData.drzava}
+                  name="country"
+                  value={formData.country}
                   onChange={handleChange}
                   placeholder="Enter your country"
                 />
               </div>
             </div>
             <div className="field">
-              <label className="label">Telefon:</label>
+              <label className="label">Number:</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  name="telefon"
-                  value={formData.telefon}
+                  name="number"
+                  value={formData.number}
                   onChange={handleChange}
                   placeholder="Enter your phone number"
                 />
@@ -184,13 +213,13 @@ const Registracija = () => {
               </div>
             </div>
             <div className="field">
-              <label className="label">Lozinka:</label>
+              <label className="label">Password:</label>
               <div className="control">
                 <input
                   className="input"
                   type="password"
-                  name="lozinka"
-                  value={formData.lozinka}
+                  name="password"
+                  value={formData.password}
                   onChange={handleChange}
                   placeholder="Enter your password"
                 />
@@ -198,15 +227,15 @@ const Registracija = () => {
             </div>
             <div>
               {/* Poruka za gresku */}
-              {greska !== '' && <h2 className='has-text-danger'>{greska}</h2>}
+              {error !== '' && <h2 className='has-text-danger'>{error}</h2>}
 
               {/* Poruka o uspesnom dodavanju */}
-              {poruka !== '' && <h2 className='has-text-success'>{poruka}</h2>}
+              {message !== '' && <h2 className='has-text-success'>{message}</h2>}
             </div>
             <div className="field mt-2">
               <div className="control">
                 <button className="button is-info" type="submit">
-                  Register
+                  Save
                 </button>
               </div>
             </div>
@@ -218,4 +247,4 @@ const Registracija = () => {
   );
 };
 
-export default Registracija;
+export default Change;
