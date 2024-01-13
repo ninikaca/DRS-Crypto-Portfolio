@@ -39,7 +39,7 @@ def login():
         return jsonify({'data': 'Login failed.'}), 401
     
 @users_blueprint.route('/api/users/get', methods=["POST"])
-def get_user():
+def get():
     data = request.get_json()
     email = data.get('email')
 
@@ -56,8 +56,9 @@ def get_user():
     
 @users_blueprint.route('/api/users/edit', methods = ["POST"])
 def edit():
-    data = request.get_json()
 
+    data = request.get_json()
+    id = data.get('id')
     name = data.get('name')
     surname = data.get('surname')
     address = data.get('address')

@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { check_session, end_session } from '../../session/session-manager';
 import LoginData from '../../interfaces/ILogin';
 import IRegistration from '../../interfaces/IRegistration';
+import Navbar from '../../components/navbar/navbar';
 
 const Change = (): React.JSX.Element => {
   const defaultData: IRegistration = {
@@ -47,7 +48,7 @@ const Change = (): React.JSX.Element => {
       });
 
       if (response.status === 200) {
-        setMessage(response.data.data);
+        setMessage(response.data.data);       
       } else {
         setError(response.data.data); // axiosresponse ima request, response, data,
         // kako smo mi slali jsonify({data: poruka}), bice respone.data pa nas data response.data.data
@@ -117,6 +118,7 @@ const Change = (): React.JSX.Element => {
 
   return (
     <div>
+      <Navbar />
       {/* ternarni operator, uslovno renderovanje, osnove reactjs --> google or ig posts */}
       {loadedUser != null &&
         <div>

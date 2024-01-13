@@ -1,7 +1,9 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { check_session, create_session, end_session } from '../../session/session-manager';
+import { check_session, create_session } from '../../session/session-manager';
 import LoginData from '../../interfaces/ILogin';
+import Navbar from '../../components/navbar/navbar';
+
 
 const Login = (): React.JSX.Element => {
   const [formData, setFormData] = useState({
@@ -17,11 +19,6 @@ const Login = (): React.JSX.Element => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  function logout(): void {
-    end_session();
-    window.location.reload(); // ne znam sto ne radi navigate('/') ....
-  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -69,21 +66,68 @@ const Login = (): React.JSX.Element => {
 
   return (
     <div>
+      <Navbar />
       {/* ternarni operator, uslovno renderovanje, osnove reactjs --> google or ig posts */}
       {user != null ?
-        <div>
-          <h1>Hello, {user.email}!</h1>
-          <button className="button is-danger" onClick={logout}>
-            Logout
-          </button>
+        <div className='login-page'>
+          <div className='columns mt-5 ml-5'>
+
+          <div className='column' style={{marginLeft:-500}}>
+              
+            </div>
+            <div className='column'>
+              <h1>Welcome to your Crypto Portfolio!</h1>
+              <h2>🚀 Track. Manage. Succeed.</h2>
+              <a className="login-item" href="/login">
+                <img
+                  src="cryptohome.png"
+                  alt=""
+                />
+              </a>
+
+            </div>
+            <div className='column' style={{marginTop:450}}>
+              <h2>Dive into the world of digital assets with our cutting-edge
+                Crypto Portfolio platform. Whether you're a seasoned trader
+                or a novice investor, we provide you with the tools you need
+                to stay ahead in the dynamic cryptocurrency market.</h2><br></br>
+              
+              <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/" }}>
+              Buy/Sell
+              </button>
+              &nbsp;
+              <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/remove" }}>
+              Remove Crypto
+              </button>
+
+            </div>
+
+            <div className='column' style={{marginTop:-53}}>
+              <a href="/preview">
+                <img
+                  src="phone.png"
+                  alt="Preview your Crypto wallet!"
+                />
+              </a>
+
+            </div>
+          </div>
         </div>
 
         :
-        <div>
-          <a href='/registration' className="link">
-            Registration
-          </a>
-          <form onSubmit={handleSubmit} className='container'>
+        
+          <div className="columns ">
+          <div className="column">
+            <a href="/">
+              <img
+                src="regis.png"
+                alt=""
+              />
+            </a>
+          </div>
+          <div className="column">  
+          <form onSubmit={handleSubmit} className='container' style={{backgroundColor: 'white', padding: 20, paddingLeft:50, paddingRight: 50, borderRadius: 15}}>
+          <h1 style={{fontSize: 62, marginTop: -120, marginBottom: 50}}>Log In</h1>
             <div className="field">
               <label className="label">Email:</label>
               <div className="control">
@@ -126,9 +170,9 @@ const Login = (): React.JSX.Element => {
             </div>
           </form>
         </div>
+        </div>
       }
-    </div>
-
+</div>
   );
 };
 
