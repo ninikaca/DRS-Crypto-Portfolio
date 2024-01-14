@@ -63,7 +63,7 @@ const Navbar = () => {
                     <div id="navbarBasicExample" className="navbar-menu">
                         <div className="navbar-start">
                             <a href="/" className="navbar-item">Home</a>
-                            <a href="/preview" className="navbar-item">Wallet</a>
+                            <a href="/portfolio" className="navbar-item">My Portfolio</a>
 
                         </div>
                         <div className="navbar-end">

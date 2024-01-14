@@ -6,9 +6,7 @@ import Login from './pages/login';
 import Edit from './pages/edit';
 import Home from './pages/home';
 import React from 'react';
-import Preview from './pages/preview';
-import Input from './pages/buy';
-import CryptoList from './pages/remove';
+import Portfolio from './pages/portfolio';
 
 function App() {
   return (
@@ -18,9 +16,7 @@ function App() {
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/edit" element={<Edit />} />
-        <Route path="/preview" element={<Preview />} />
-        <Route path="/buy" element={<Input/>} />
-        <Route path="/remove" element={<CryptoList/>} />
+        <Route path="/portfolio" element={<Portfolio />} />
 
       </Routes>
     </Router>

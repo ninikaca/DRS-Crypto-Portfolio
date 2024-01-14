@@ -72,7 +72,7 @@ const Registration = (): React.JSX.Element => {
     const check : LoginData | null =  check_session()
     setUser(check); //  korisnik iz local storage
     if(check != null)
-      window.location.href = "/"
+      window.location.href = "/login"
 
   }, [])
 

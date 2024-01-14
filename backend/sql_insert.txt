@@ -1,0 +1,21 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    surname VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    number VARCHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE, 
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    date_and_time VARCHAR(30) NOT NULL,
+    type ENUM('bought', 'sold') NOT NULL,
+    currency VARCHAR(5) NOT NULL,
+    amount_paid_dollars DECIMAL(10, 4) NOT NULL,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+);

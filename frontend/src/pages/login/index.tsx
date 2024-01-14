@@ -4,7 +4,6 @@ import { check_session, create_session } from '../../session/session-manager';
 import LoginData from '../../interfaces/ILogin';
 import Navbar from '../../components/navbar/navbar';
 
-
 const Login = (): React.JSX.Element => {
   const [formData, setFormData] = useState({
     email: '',
@@ -40,7 +39,7 @@ const Login = (): React.JSX.Element => {
 
         // cuva trenutno prijavljen korisnik se u localstorage
         create_session(formData);
-        window.location.reload(); // navigate('/'); // promeni posle u konkretnu stranicu tipa navigate('/pocetna');
+        window.location.reload();
 
       } else {
         setError(response.data.data); // axiosresponse ima request, response, data,
@@ -92,18 +91,18 @@ const Login = (): React.JSX.Element => {
                 or a novice investor, we provide you with the tools you need
                 to stay ahead in the dynamic cryptocurrency market.</h2><br></br>
               
-              <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/" }}>
+              <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/buy" }}>
               Buy/Sell
               </button>
               &nbsp;
-              <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/remove" }}>
-              Remove Crypto
+              <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/portfolio" }}>
+              My Crypto
               </button>
 
             </div>
 
             <div className='column' style={{marginTop:-53}}>
-              <a href="/preview">
+              <a href="/portfolio">
                 <img
                   src="phone.png"
                   alt="Preview your Crypto wallet!"
