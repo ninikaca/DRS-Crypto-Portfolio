@@ -9,7 +9,9 @@ const Portfolio: React.FC = () => {
 
 
     const buyCryptoSubmit = (transaction: Transaction) => {
-        console.table(transaction);
+        console.log(transaction);
+
+        // to do upis u bazu, pozovi api
     }
 
     useEffect(() => {

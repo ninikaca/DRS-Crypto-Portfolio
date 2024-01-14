@@ -43,12 +43,11 @@ def get():
     data = request.get_json()
     email = data.get('email')
 
-    print(data)
-
     if not all([email]):
         return jsonify({'data': 'Missing email'}), 400
 
     user = get_user(email)
+
     if user:
         return jsonify({'data': user.serialize()}), 200
     else:

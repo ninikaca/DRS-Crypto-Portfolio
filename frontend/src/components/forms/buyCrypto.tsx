@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import Transaction from '../../interfaces/ITransaction';
 import ExchangeRates from "../../interfaces/ExchangeRates";
 import axios from "axios";
+import { check_session } from "../../session/session-manager";
+import LoginData from "../../interfaces/ILogin";
+import IRegistration from "../../interfaces/IRegistration";
 
 interface TransactionFormProps {
   EnteredData: (transaction: Transaction) => void;
@@ -11,7 +14,7 @@ interface TransactionFormProps {
 const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm }) => {
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates | null>(null);
   const [formData, setFormData] = useState<Transaction>({
-    user_id: 1, // Set a default user_id or fetch it from somewhere
+    user_id: -1, // Set a default user_id or fetch it from somewhere
     date_and_time: "",
     type: "bought",
     currency: "",
@@ -23,14 +26,34 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     EnteredData(formData);
     CloseForm(false); // close form
 
+    var fetchedId: number = -1;
+
+    // get user id from flask api
+    var user_loggedin: LoginData | null = check_session();
+
+    if(user_loggedin) {
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/users/get', { email: user_loggedin.email }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+            if(response.status === 200) {
+                formData.user_id = response.data.data.id;
+            }        
+        }
+        catch {}
+    }
+
     // reset the form after submission
     setFormData({
-      user_id: 1, // Set a default user_id or fetch it from somewhere
+      user_id: fetchedId, // Set a default user_id or fetch it from somewhere
       date_and_time: "",
       type: "bought",
       currency: "",
@@ -126,7 +149,7 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
 
       <div className="field">
         <div className="control">
-          <button className="button is-primary" type="submit">
+          <button className="button is-primary" type="submit" style={{borderRadius:7}}>
             Submit
           </button>
         </div>
