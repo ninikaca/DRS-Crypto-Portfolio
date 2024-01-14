@@ -21,4 +21,14 @@ class Transaction(Base):
             "amount_paid_dollars": float(self.amount_paid_dollars),
         }
 
+    @classmethod
+    def deserialize(cls, data):
+        return cls(
+            user_id=data.get('user_id'),
+            date_and_time=data.get('date_and_time'),
+            type=data.get('type'),
+            currency=data.get('currency'),
+            amount_paid_dollars=float(data.get('amount_paid_dollars'))
+        )
+
 Base.metadata.create_all(engine)

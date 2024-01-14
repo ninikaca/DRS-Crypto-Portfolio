@@ -2,16 +2,36 @@ import React, { useState, useEffect } from "react";
 import Card from "../../components/portfolioCard/card";
 import Transaction from "../../interfaces/ITransaction";
 import BuyCryptoForm from "../../components/forms/buyCrypto";
+import axios, { AxiosResponse } from "axios";
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [showBuyForm, setShowBuyForm] = useState<boolean>(false);
 
 
-    const buyCryptoSubmit = (transaction: Transaction) => {
+    const buyCryptoSubmit = async (transaction: Transaction) => {
         console.log(transaction);
 
         // to do upis u bazu, pozovi api
+        try {
+            const response: AxiosResponse = await axios.post('http://localhost:5000/api/transaction/buyCrypto', transaction, {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+      
+            if (response.status === 201) {
+              console.log(response.data.data);
+            }
+            else {
+                console.warn("Nemere radit")
+            }
+        }
+        catch 
+        {
+            console.warn("Nemere radit exception")
+        }
+
     }
 
     useEffect(() => {

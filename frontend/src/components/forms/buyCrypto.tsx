@@ -28,9 +28,7 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    EnteredData(formData);
-    CloseForm(false); // close form
-
+  
     var fetchedId: number = -1;
 
     // get user id from flask api
@@ -45,7 +43,10 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
           },
         });
             if(response.status === 200) {
-                formData.user_id = response.data.data.id;
+              formData.user_id = response.data.data.id;
+
+              EnteredData(formData);
+              CloseForm(false); // close form
             }        
         }
         catch {}

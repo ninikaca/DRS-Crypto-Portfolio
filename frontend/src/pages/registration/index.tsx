@@ -47,8 +47,8 @@ const Registration = (): React.JSX.Element => {
         setMessage(response.data.data);
 
         // cuva trenutno prijavljen korisnik se u localstorage
-        console.log(create_session(formData));
-        window.location.reload(); // navigate('/'); // promeni posle u konkretnu stranicu tipa navigate('/pocetna');
+        create_session(formData);
+        window.location.reload();
 
       } else {
         setError(response.data.data); // axiosresponse ima request, response, data,
