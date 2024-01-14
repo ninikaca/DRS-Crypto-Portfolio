@@ -1,5 +1,5 @@
 interface Transaction {
-    id: number;
+    id?: number;
     user_id: number;
     date_and_time: string;
     type: 'bought' | 'sold';
