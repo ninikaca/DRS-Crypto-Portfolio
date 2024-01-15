@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import Transaction from '../../interfaces/ITransaction';
 import ExchangeRates from "../../interfaces/ExchangeRates";
 import axios from "axios";
-import { check_session } from "../../session/session-manager";
-import LoginData from "../../interfaces/ILogin";
-import IRegistration from "../../interfaces/IRegistration";
 
 interface TransactionFormProps {
   userId: number;

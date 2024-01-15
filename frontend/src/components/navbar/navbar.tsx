@@ -3,10 +3,18 @@ import { check_session, end_session } from "../../session/session-manager";
 import axios from "axios";
 import LoginData from "../../interfaces/ILogin";
 import React from "react";
+import AutocompleteSearch from "../search/searchBar";
+import ExchangeRates from "../../interfaces/ExchangeRates";
+
+interface Option {
+    label: string;
+    value: string;
+}
 
 const Navbar = () => {
     const [current, setCurrent] = useState<LoginData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [options, setOptions] = useState<Option[]>([]);
 
     useEffect(() => {
         setLoading(true)
@@ -31,7 +39,31 @@ const Navbar = () => {
             }
         }
 
-        check()
+        const fetchExchangeRates = async () => {
+            try {
+              const response = await axios.get<ExchangeRates>("http://localhost:5000/api/currencies/get/rates", {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+      
+              const jsonrates: ExchangeRates = response.data;
+
+              var pomocni = [];
+              for (const [key, value] of Object.entries(jsonrates.rates)) {
+                const novi: Option = {'label': key + " " + jsonrates.rates[key] + "", 'value': value.toString()}
+                pomocni.push(novi);
+              }
+
+              setOptions(pomocni);
+              
+            } catch (error) {
+              console.error("Error fetching exchange rates:", error);
+            }
+          };
+
+        check();
+        fetchExchangeRates();
         setLoading(false)
     }, [])
     return (
@@ -64,7 +96,9 @@ const Navbar = () => {
                         <div className="navbar-start">
                             <a href="/" className="navbar-item">Home</a>
                             <a href="/portfolio" className="navbar-item">My Portfolio</a>
-
+                            <div style={{ marginLeft: 30, width: 400 }}>
+                                <AutocompleteSearch options={options} />
+                            </div>
                         </div>
                         <div className="navbar-end">
                             <div className="navbar-item">
@@ -80,7 +114,7 @@ const Navbar = () => {
                                     <div>
                                         <div className="buttons">
                                             <h1>Welcome, {current.email} &emsp;</h1>
-                                            
+
                                             <button onClick={() => { window.location.href = "/edit" }} className="button is-info is-outlined" >
                                                 Edit profile
                                             </button>

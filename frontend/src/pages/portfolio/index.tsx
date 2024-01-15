@@ -146,6 +146,7 @@ const Portfolio: React.FC = () => {
         fetchTransactions();
         fetchPortfolio();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId]);
 
     return (
