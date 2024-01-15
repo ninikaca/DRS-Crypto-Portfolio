@@ -122,7 +122,18 @@ const Change = (): React.JSX.Element => {
       {/* ternarni operator, uslovno renderovanje, osnove reactjs --> google or ig posts */}
       {loadedUser != null &&
         <div>
-          <form onSubmit={handleSubmit} className='container'>
+          <div className="columns ">
+          <div className="column">
+            <a href="/">
+              <img
+                src="regis.png"
+                alt=""
+              />
+            </a>
+          </div>
+          <div className="column">  
+    
+          <form onSubmit={handleSubmit} className='container' style={{backgroundColor: 'white', padding: 20, paddingLeft:50, paddingRight: 50, borderRadius: 15}}>
             <div className="field">
               <label className="label">Name:</label>
               <div className="control">
@@ -242,6 +253,8 @@ const Change = (): React.JSX.Element => {
               </div>
             </div>
           </form>
+        </div>
+        </div>
         </div>
       }
     </div>

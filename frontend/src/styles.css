@@ -15,11 +15,29 @@ body {
 }
 
 .home-page {
-  background-color: white;
+  background-color: #bdc8de;
   font-family: 'Roboto', Arial, sans-serif;
   color: black;
 }
 
+.home-page h1 {
+  font-size: 1.6em;
+}
+
+.home-page h2 {
+  font-size: 1.5em;
+}
+
+.home-page h3 {
+  font-size: 1em;
+  color: gray;
+}
+
+.wallet-page {
+  background-color: #bdc8de;
+  font-family: 'Roboto', Arial, sans-serif;
+  color: black;
+}
 
 .login-page {
   background-color: #bdc8de;

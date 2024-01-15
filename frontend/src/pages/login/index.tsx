@@ -90,13 +90,10 @@ const Login = (): React.JSX.Element => {
                 Crypto Portfolio platform. Whether you're a seasoned trader
                 or a novice investor, we provide you with the tools you need
                 to stay ahead in the dynamic cryptocurrency market.</h2><br></br>
-              
-              <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/buy" }}>
-              Buy/Sell
-              </button>
+      
               &nbsp;
               <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/portfolio" }}>
-              My Crypto
+              My Portfolio
               </button>
 
             </div>

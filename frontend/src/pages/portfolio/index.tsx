@@ -6,6 +6,7 @@ import axios, { AxiosResponse } from "axios";
 import LoginData from "../../interfaces/ILogin";
 import { check_session } from "../../session/session-manager";
 import TransactionHistory from "../../components/tables/transactionHistory";
+import Navbar from '../../components/navbar/navbar';
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -89,8 +90,10 @@ const Portfolio: React.FC = () => {
     }, [userId]);
 
     return (
-        <main className="section">
+        <main className="wallet-page">
             <div>
+                <Navbar />
+                <div className="hero-body" style={{margin:50}}>
                 <h1 className="title">My Crypto Portfolio</h1>
                 {/* Net Worth and Growth/Decrease Cards */}
                 <div className="columns">
@@ -103,7 +106,7 @@ const Portfolio: React.FC = () => {
                 <div className="field is-grouped">
                     <br /><br />
                     <p className="control">
-                        <button className="button has-background-link	has-text-white is-medium" style={{ borderRadius: 7 }} onClick={() => setShowBuyForm(true)}>Buy Crypto</button>
+                        <button className="button has-background-link has-text-white is-medium" style={{ borderRadius: 7 }} onClick={() => setShowBuyForm(true)}>Buy Crypto</button>
                     </p>
                 </div>
 
@@ -117,6 +120,7 @@ const Portfolio: React.FC = () => {
                 {loading ? <h1 className="is-size-4 has-text-info-dark mt-5 has-text-weight-normal has-text-centered">Loading your transaction history...</h1> :
                     transactions ? <TransactionHistory transactions={transactions} /> : <h1 className="title mt-3">No transactions</h1>
                 }
+                </div>
 
             </div>
         </main>
