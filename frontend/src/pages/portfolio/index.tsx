@@ -149,7 +149,7 @@ const Portfolio: React.FC = () => {
     }, [userId]);
 
     return (
-        <main className="wallet-page">
+        <main className="wallet-page" style={{paddingBottom: 50}}>
             <div>
                 <Navbar />
                 <div className="hero-body" style={{ margin: 50 }}>
@@ -194,12 +194,12 @@ const Portfolio: React.FC = () => {
 
                     {/* Crypto Portoflio */}
                     {loading ? <h1 className="is-size-4 has-text-link-dark mt-5 has-text-weight-normal has-text-centered">Loading your crypto wallet...</h1> :
-                        cryptoTransactions ? <UserCryptoCurrencies transactions={cryptoTransactions} userId={userId} /> : <h1 className="title mt-3">No currencies</h1>
+                        cryptoTransactions ? <UserCryptoCurrencies transactions={cryptoTransactions} userId={userId} fetchPortfolio={fetchPortfolio} fetchTransactions={fetchTransactions} /> : <h1 className="title mt-3">No currencies</h1>
                     }
 
                     {/* Crypto Transactions Table */}
                     {loading ? <h1 className="is-size-4 has-text-info-dark mt-5 has-text-weight-normal has-text-centered">Loading your transaction history...</h1> :
-                        transactions ? <TransactionHistory transactions={transactions} /> : <h1 className="title mt-3">No transactions</h1>
+                        transactions ? <TransactionHistory transactions={transactions} fetchPortfolio={fetchPortfolio} fetchTransactions={fetchTransactions} /> : <h1 className="title mt-3">No transactions</h1>
                     }
                 </div>
             </div>

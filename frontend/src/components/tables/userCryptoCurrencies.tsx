@@ -1,11 +1,33 @@
 import React from "react";
 import IPortoflio from "../../interfaces/IPortoflio";
+import axios, { AxiosResponse } from "axios";
 
-const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions, userId }) => {
-    const onCancelTransaction = (currency: string, userId?: number) => {
-        // Call your function to handle canceling the transaction
-        // to do pozovi api da ponisti ovo
-        alert(currency + " " + userId);
+const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions, userId, fetchPortfolio, fetchTransactions }) => {
+    const onCancelTransaction = async (currency: string, userId?: number) => {
+        try {
+            const response: AxiosResponse = await axios.post('http://localhost:5000/api/transaction/deleteCurrency',
+                {
+                    user_id: userId,
+                    currency: currency
+                }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 200) {
+                console.log(response.data);
+                fetchPortfolio();
+                fetchTransactions();
+            }
+            else {
+                console.warn("Nemere radit")
+            }
+        }
+        catch
+        {
+            console.warn("Nemere radit exception")
+        }
     };
 
     return (
@@ -37,7 +59,6 @@ const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions, userId }) =>
                         </tr>
                     ))}
                 </tbody>
-
             </table>
         </div>
     );

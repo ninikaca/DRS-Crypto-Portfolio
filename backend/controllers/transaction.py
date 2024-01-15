@@ -12,6 +12,22 @@ def create(transaction):
         db.session.rollback()
         return False
 
+def delete_crypto(user_id, currency):
+    try:
+        transactions = db.session.query(Transaction).filter(Transaction.user_id == user_id, Transaction.currency == currency).all()
+
+        if not transactions:
+            return False
+        
+        for transaction in transactions:
+            db.session.delete(transaction)
+
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        return False
+
 def create_sale_transaction(transaction):
     try:
         transactions = db.session.query(Transaction.currency, Transaction.type, func.sum(Transaction.amount_paid_dollars)) \
@@ -90,3 +106,17 @@ def get_crypto_currencies_by_user(user_id):
         return portfolio
     except Exception as e:
         return None
+
+def delete_transcation_by_id(transaction_id):
+    try:
+        transaction = db.session.query(Transaction).get(transaction_id)
+
+        if not transaction:
+            return False
+        
+        db.session.delete(transaction)
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        return False

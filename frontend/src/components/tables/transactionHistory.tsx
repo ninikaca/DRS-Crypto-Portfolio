@@ -1,11 +1,33 @@
 import React from "react";
 import Transactions from "../../interfaces/ITransactions";
+import axios, { AxiosResponse } from "axios";
 
-const TransactionHistory: React.FC<Transactions> = ({ transactions }) => {
-    const onCancelTransaction = () => {
-        // Call your function to handle canceling the transaction
-        // to do pozovi api da ponisti ovo
-        alert("Cancel transaction");
+const TransactionHistory: React.FC<Transactions> = ({ transactions, fetchPortfolio, fetchTransactions }) => {
+    const onCancelTransaction = async (id?: number) => {
+        try {
+            const response: AxiosResponse = await axios.post('http://localhost:5000/api/transaction/deleteTransaction',
+                {
+                    transaction_id: id
+                }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 200) {
+                console.log(response.data);
+                fetchPortfolio();
+                fetchTransactions();
+            }
+            else {
+                console.warn("Nemere radit")
+            }
+        }
+        catch
+        {
+            console.warn("Nemere radit exception")
+        }
+
     };
 
     return (
@@ -41,7 +63,7 @@ const TransactionHistory: React.FC<Transactions> = ({ transactions }) => {
                                 <button
                                     className="button has-background-danger-dark has-text-white"
                                     style={{ borderRadius: 7 }}
-                                    onClick={onCancelTransaction}
+                                    onClick={() => {onCancelTransaction(transaction.id)}}
                                 >
                                     Cancel transaction
                                 </button>
