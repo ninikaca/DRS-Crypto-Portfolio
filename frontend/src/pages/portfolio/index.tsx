@@ -7,6 +7,7 @@ import LoginData from "../../interfaces/ILogin";
 import { check_session } from "../../session/session-manager";
 import TransactionHistory from "../../components/tables/transactionHistory";
 import Navbar from '../../components/navbar/navbar';
+import UserCryptoCurrencies from "../../components/tables/userCryptoCurrencies";
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -114,6 +115,11 @@ const Portfolio: React.FC = () => {
                     <div>
                         <BuyCryptoForm EnteredData={buyCryptoSubmit} CloseForm={setShowBuyForm} userId={userId} />
                     </div>
+                }
+
+                {/* Crypto Transactions Table */}
+                {loading ? <h1 className="is-size-4 has-text-link-dark mt-5 has-text-weight-normal has-text-centered">Loading your crypto wallet...</h1> :
+                    transactions ? <UserCryptoCurrencies transactions={transactions} /> : <h1 className="title mt-3">No currencies</h1>
                 }
 
                 {/* Crypto Transactions Table */}

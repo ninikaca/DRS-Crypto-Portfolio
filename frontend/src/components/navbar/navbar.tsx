@@ -71,10 +71,10 @@ const Navbar = () => {
                                 {current == null ?
 
                                     <div className="buttons">
-                                        <a href="/registration" className="button is-primary">
+                                        <a href="/registration" className="button has-background-link has-text-white">
                                             <strong>Register</strong>
                                         </a>
-                                        <a href="/login" className="button is-light">Log In</a>
+                                        <a href="/login" className="button is-info is-outlined">Log In</a>
                                     </div>
                                     :
                                     <div>

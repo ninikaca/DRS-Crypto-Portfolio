@@ -1,3 +1,4 @@
+-- SQLBook: Code
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -19,3 +20,13 @@ CREATE TABLE transactions (
     amount_paid_dollars DECIMAL(10, 4) NOT NULL,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+SELECT
+    currency,
+    SUM(amount_paid_dollars) AS total_amount
+FROM
+    transactions
+WHERE
+    user_id = :user_id
+GROUP BY
+    currency;
