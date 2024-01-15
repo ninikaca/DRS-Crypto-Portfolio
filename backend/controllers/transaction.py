@@ -12,6 +12,43 @@ def create(transaction):
         db.session.rollback()
         return False
 
+def create_sale_transaction(transaction):
+    try:
+        transactions = db.session.query(Transaction.currency, Transaction.type, func.sum(Transaction.amount_paid_dollars)) \
+            .filter(Transaction.user_id == transaction.user_id, Transaction.currency == transaction.currency) \
+            .group_by(Transaction.type, Transaction.currency) \
+            .all()
+
+        if not transactions: # ne moze da proda kripto valutu koju ni nema u portofolio
+            return False
+
+        count_of = len(transactions)
+        my_balance = 0.0
+
+        if count_of == 1: # ima samo kupovinu onda je stanje u stvari total amount
+            #   0         1         2                   
+            # ('BTC', 'bought', Decimal('420.0000'))  // transacrions[0]
+            # ('BTC', 'sold', Decimal('12.0000'))     // transcation[1]
+            my_balance = float(transactions[0][2])
+        elif count_of == 2: # ima i kupovina i prodaja
+            array = []
+            for tr in transactions:
+                array.append(float(tr[2]))
+            
+            my_balance = abs(array[0] - array[1])
+
+        # da li prodaje vise nego sto ima na stanju
+        if float(transaction.amount_paid_dollars) > my_balance:
+            return False
+
+        db.session.add(transaction)
+        db.session.commit()
+        return True
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        return False
+
 def get_transaction_by_user(user_id):
     try:
         transactions = db.session.query(Transaction).filter(Transaction.user_id == user_id).all()
@@ -52,5 +89,4 @@ def get_crypto_currencies_by_user(user_id):
         
         return portfolio
     except Exception as e:
-        print(e)
         return None

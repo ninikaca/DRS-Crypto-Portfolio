@@ -133,7 +133,7 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm,
       <div className="field">
         <div className="control">
           <button className="button has-background-primary-dark has-text-white" type="submit" style={{ borderRadius: 7 }}>
-            Submit
+            Buy Crypto
           </button>
 
           <button className="button ml-3 has-background-danger-dark has-text-white" type="button" style={{ borderRadius: 7 }} onClick={() => CloseForm(false)}>

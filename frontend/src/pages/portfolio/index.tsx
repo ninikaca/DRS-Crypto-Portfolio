@@ -8,12 +8,13 @@ import { check_session } from "../../session/session-manager";
 import TransactionHistory from "../../components/tables/transactionHistory";
 import Navbar from '../../components/navbar/navbar';
 import UserCryptoCurrencies from "../../components/tables/userCryptoCurrencies";
-import IPortfolio from "../../interfaces/IPortoflio";
 import CurrencyInfo from "../../interfaces/ICryptoCurrency";
+import SellCryptoForm from "../../components/forms/sellCrypto";
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [showBuyForm, setShowBuyForm] = useState<boolean>(false);
+    const [showSellForm, setShowSellForm] = useState<boolean>(false);
     const [userId, setUserId] = useState<number>(0);
     const [transactions, setTransactions] = useState<Transaction[]>();
     const [cryptoTransactions, setCryptoTransactions] = useState<CurrencyInfo[]>();
@@ -24,6 +25,33 @@ const Portfolio: React.FC = () => {
         // to do upis u bazu, pozovi api
         try {
             const response: AxiosResponse = await axios.post('http://localhost:5000/api/transaction/buyCrypto', transaction, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 201) {
+                console.log(response.data.data); // to do neku lepu ui poruku
+                fetchTransactions();
+                fetchPortfolio();
+            }
+            else {
+                console.warn("Nemere radit")
+            }
+        }
+        catch
+        {
+            console.warn("Nemere radit exception")
+        }
+
+    }
+
+    const sellCryptoSubmit = async (transaction: Transaction) => {
+        transaction.user_id = userId;
+
+        // to do upis u bazu, pozovi api
+        try {
+            const response: AxiosResponse = await axios.post('http://localhost:5000/api/transaction/sellCrypto', transaction, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -124,40 +152,56 @@ const Portfolio: React.FC = () => {
         <main className="wallet-page">
             <div>
                 <Navbar />
-                <div className="hero-body" style={{margin:50}}>
-                <h1 className="title">My Crypto Portfolio</h1>
-                {/* Net Worth and Growth/Decrease Cards */}
-                <div className="columns">
-                    <Card title="Net Worth" subtitle="$1202.223" />
-                    <Card title="Growth/Decrease" subtitle="-$202.223" />
-                </div>
-
-                {/* Buy Crypto Button */}
-                <br />
-                <div className="field is-grouped">
-                    <br /><br />
-                    <p className="control">
-                        <button className="button has-background-link has-text-white is-medium" style={{ borderRadius: 7 }} onClick={() => setShowBuyForm(true)}>Buy Crypto</button>
-                    </p>
-                </div>
-
-                {showBuyForm &&
-                    <div>
-                        <BuyCryptoForm EnteredData={buyCryptoSubmit} CloseForm={setShowBuyForm} userId={userId} />
+                <div className="hero-body" style={{ margin: 50 }}>
+                    <h1 className="title">My Crypto Portfolio</h1>
+                    {/* Net Worth and Growth/Decrease Cards */}
+                    <div className="columns">
+                        <Card title="Net Worth" subtitle="$1202.223" />
+                        <Card title="Growth/Decrease" subtitle="-$202.223" />
                     </div>
-                }
 
-                {/* Crypto Portoflio */}
-                {loading ? <h1 className="is-size-4 has-text-link-dark mt-5 has-text-weight-normal has-text-centered">Loading your crypto wallet...</h1> :
-                    cryptoTransactions ? <UserCryptoCurrencies transactions={cryptoTransactions} userId={userId} /> : <h1 className="title mt-3">No currencies</h1>
-                }
+                    {/* Buy Crypto Button */}
+                    <br />
+                    <div className="field is-grouped" style={{ justifyContent: 'space-between' }}>
+                        <p className="control">
+                            <button className="button has-background-link has-text-white is-medium" style={{ borderRadius: 7 }} onClick={() => setShowBuyForm(true)}>
+                                Buy Crypto
+                            </button>
+                        </p>
 
-                {/* Crypto Transactions Table */}
-                {loading ? <h1 className="is-size-4 has-text-info-dark mt-5 has-text-weight-normal has-text-centered">Loading your transaction history...</h1> :
-                    transactions ? <TransactionHistory transactions={transactions} /> : <h1 className="title mt-3">No transactions</h1>
-                }
+                        <p className="control">
+                            <button className="button has-background-success-dark has-text-white is-medium" style={{ borderRadius: 7 }} onClick={() => setShowSellForm(true)}>
+                                Sell Crypto
+                            </button>
+                        </p>
+                    </div>
+
+
+                    {/* Buy and Sell Crypto Forms */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        {showBuyForm ? (
+                            <div style={{ width: '48%' }}>
+                                <BuyCryptoForm EnteredData={buyCryptoSubmit} CloseForm={() => setShowBuyForm(false)} userId={userId} />
+                            </div>
+                        ) : <div style={{ width: '48%' }}></div> }
+                        {showSellForm && (
+                            <div style={{ width: '48%' }}>
+                                <SellCryptoForm EnteredData={sellCryptoSubmit} CloseForm={() => setShowSellForm(false)} userId={userId} />
+                            </div>
+                        )}
+                    </div>
+
+
+                    {/* Crypto Portoflio */}
+                    {loading ? <h1 className="is-size-4 has-text-link-dark mt-5 has-text-weight-normal has-text-centered">Loading your crypto wallet...</h1> :
+                        cryptoTransactions ? <UserCryptoCurrencies transactions={cryptoTransactions} userId={userId} /> : <h1 className="title mt-3">No currencies</h1>
+                    }
+
+                    {/* Crypto Transactions Table */}
+                    {loading ? <h1 className="is-size-4 has-text-info-dark mt-5 has-text-weight-normal has-text-centered">Loading your transaction history...</h1> :
+                        transactions ? <TransactionHistory transactions={transactions} /> : <h1 className="title mt-3">No transactions</h1>
+                    }
                 </div>
-
             </div>
         </main>
     );

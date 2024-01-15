@@ -30,3 +30,16 @@ WHERE
     user_id = :user_id
 GROUP BY
     currency;
+
+SELECT
+    currency,
+    type,
+    SUM(amount_paid_dollars) AS total_amount
+FROM
+    transactions
+WHERE
+    user_id = :user_id
+    AND currency = :currency
+GROUP BY
+    type,
+    currency;
