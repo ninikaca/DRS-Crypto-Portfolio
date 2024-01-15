@@ -1,7 +1,7 @@
 import React from "react";
 import IPortoflio from "../../interfaces/IPortoflio";
 
-const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions }) => {
+const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions, userId }) => {
     const onCancelTransaction = (currency: string, userId?: number) => {
         // Call your function to handle canceling the transaction
         // to do pozovi api da ponisti ovo
@@ -24,12 +24,12 @@ const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions }) => {
                     {Object.entries(transactions).map(([currencyCode, currencyInfo]) => (
                         <tr key={currencyInfo.currency}>
                             <td className="has-text-link has-text-weight-bold">{currencyInfo.currency}</td>
-                            <td className="has-text-weight-bold">${currencyInfo.total_amount}</td>
+                            <td className="has-text-weight-medium">{currencyInfo.total_amount}</td>
                             <td>
                                 <button
                                     className="button has-background-danger-dark has-text-white"
                                     style={{ borderRadius: 7 }}
-                                    onClick={() => onCancelTransaction(currencyInfo.currency, currencyInfo.userId)}
+                                    onClick={() => onCancelTransaction(currencyInfo.currency, userId)}
                                 >
                                     Remove currency from portfolio
                                 </button>

@@ -9,13 +9,14 @@ import TransactionHistory from "../../components/tables/transactionHistory";
 import Navbar from '../../components/navbar/navbar';
 import UserCryptoCurrencies from "../../components/tables/userCryptoCurrencies";
 import IPortfolio from "../../interfaces/IPortoflio";
+import CurrencyInfo from "../../interfaces/ICryptoCurrency";
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [showBuyForm, setShowBuyForm] = useState<boolean>(false);
     const [userId, setUserId] = useState<number>(0);
     const [transactions, setTransactions] = useState<Transaction[]>();
-    const [cryptoTransactions, setCryptoTransactions] = useState<IPortfolio>();
+    const [cryptoTransactions, setCryptoTransactions] = useState<CurrencyInfo[]>();
 
     const buyCryptoSubmit = async (transaction: Transaction) => {
         transaction.user_id = userId;
@@ -31,6 +32,7 @@ const Portfolio: React.FC = () => {
             if (response.status === 201) {
                 console.log(response.data.data); // to do neku lepu ui poruku
                 fetchTransactions();
+                fetchPortfolio();
             }
             else {
                 console.warn("Nemere radit")
@@ -81,7 +83,6 @@ const Portfolio: React.FC = () => {
 
             if (response.status === 200) {
                 setCryptoTransactions(response.data);
-                console.log(response.data); // delete after
             }
             else {
                 console.warn("Nemere radit")
@@ -146,9 +147,9 @@ const Portfolio: React.FC = () => {
                     </div>
                 }
 
-                {/* Crypto Transactions Table */}
+                {/* Crypto Portoflio */}
                 {loading ? <h1 className="is-size-4 has-text-link-dark mt-5 has-text-weight-normal has-text-centered">Loading your crypto wallet...</h1> :
-                    transactions ? <UserCryptoCurrencies transactions={cryptoTransactions} /> : <h1 className="title mt-3">No currencies</h1>
+                    cryptoTransactions ? <UserCryptoCurrencies transactions={cryptoTransactions} userId={userId} /> : <h1 className="title mt-3">No currencies</h1>
                 }
 
                 {/* Crypto Transactions Table */}

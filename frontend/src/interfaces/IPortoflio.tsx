@@ -1,7 +1,8 @@
 import CurrencyInfo from './ICryptoCurrency';
 
 interface IPortfolio {
-    [currency: string]: CurrencyInfo;
+    transactions: CurrencyInfo[];
+    userId: number;
   }
 
   export default IPortfolio;
