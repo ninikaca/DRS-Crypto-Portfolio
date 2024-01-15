@@ -7,11 +7,12 @@ import LoginData from "../../interfaces/ILogin";
 import IRegistration from "../../interfaces/IRegistration";
 
 interface TransactionFormProps {
+  userId: number;
   EnteredData: (transaction: Transaction) => void;
   CloseForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm }) => {
+const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm, userId }) => {
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates | null>(null);
   const [formData, setFormData] = useState<Transaction>({
     user_id: -1, // Set a default user_id or fetch it from somewhere
@@ -28,33 +29,14 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
-    var fetchedId: number = -1;
 
-    // get user id from flask api
-    var user_loggedin: LoginData | null = check_session();
-
-    if(user_loggedin) {
-
-        try {
-            const response = await axios.post('http://localhost:5000/api/users/get', { email: user_loggedin.email }, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-            if(response.status === 200) {
-              formData.user_id = response.data.data.id;
-
-              EnteredData(formData);
-              CloseForm(false); // close form
-            }        
-        }
-        catch {}
-    }
+    formData.user_id = userId;
+    EnteredData(formData);
+    CloseForm(false); // close form
 
     // reset the form after submission
     setFormData({
-      user_id: fetchedId, // Set a default user_id or fetch it from somewhere
+      user_id: 0, // Set a default user_id or fetch it from somewhere
       date_and_time: "",
       type: "bought",
       currency: "",
@@ -66,12 +48,12 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
     const fetchExchangeRates = async () => {
       try {
         const response = await axios.get<ExchangeRates>("http://localhost:5000/api/currencies/get/rates", {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });        
-          
-          setExchangeRates(response.data);
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        setExchangeRates(response.data);
       } catch (error) {
         console.error("Error fetching exchange rates:", error);
       }
@@ -81,7 +63,7 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
   }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="has-background-link-light" style={{padding: 10, borderRadius: 10}}>
       <div className="field">
         <label className="label">Date & Time</label>
         <div className="control">
@@ -150,8 +132,12 @@ const BuyCryptoForm: React.FC<TransactionFormProps> = ({ EnteredData, CloseForm 
 
       <div className="field">
         <div className="control">
-          <button className="button is-primary" type="submit" style={{borderRadius:7}}>
+          <button className="button has-background-primary-dark has-text-white" type="submit" style={{ borderRadius: 7 }}>
             Submit
+          </button>
+
+          <button className="button ml-3 has-background-danger-dark has-text-white" type="button" style={{ borderRadius: 7 }} onClick={() => CloseForm(false)}>
+            Cancel
           </button>
         </div>
       </div>
