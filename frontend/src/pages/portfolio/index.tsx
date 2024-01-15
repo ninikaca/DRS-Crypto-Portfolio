@@ -8,12 +8,14 @@ import { check_session } from "../../session/session-manager";
 import TransactionHistory from "../../components/tables/transactionHistory";
 import Navbar from '../../components/navbar/navbar';
 import UserCryptoCurrencies from "../../components/tables/userCryptoCurrencies";
+import IPortfolio from "../../interfaces/IPortoflio";
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [showBuyForm, setShowBuyForm] = useState<boolean>(false);
     const [userId, setUserId] = useState<number>(0);
     const [transactions, setTransactions] = useState<Transaction[]>();
+    const [cryptoTransactions, setCryptoTransactions] = useState<IPortfolio>();
 
     const buyCryptoSubmit = async (transaction: Transaction) => {
         transaction.user_id = userId;
@@ -66,6 +68,32 @@ const Portfolio: React.FC = () => {
         setLoading(false);
     }
 
+    const fetchPortfolio = async () => {
+        try {
+            setLoading(true);
+            if (userId === 0) return;
+
+            const response: AxiosResponse = await axios.post('http://localhost:5000/api/transaction/getCryptoPortfolio', { user_id: userId }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 200) {
+                setCryptoTransactions(response.data);
+                console.log(response.data); // delete after
+            }
+            else {
+                console.warn("Nemere radit")
+            }
+        }
+        catch
+        {
+            console.warn("Nemere radit exception")
+        }
+        setLoading(false);
+    }
+
     useEffect(() => {
         const getUserId = async () => {
             var user_loggedin: LoginData | null = check_session();
@@ -87,6 +115,7 @@ const Portfolio: React.FC = () => {
 
         getUserId();
         fetchTransactions();
+        fetchPortfolio();
 
     }, [userId]);
 
@@ -119,7 +148,7 @@ const Portfolio: React.FC = () => {
 
                 {/* Crypto Transactions Table */}
                 {loading ? <h1 className="is-size-4 has-text-link-dark mt-5 has-text-weight-normal has-text-centered">Loading your crypto wallet...</h1> :
-                    transactions ? <UserCryptoCurrencies transactions={transactions} /> : <h1 className="title mt-3">No currencies</h1>
+                    transactions ? <UserCryptoCurrencies transactions={cryptoTransactions} /> : <h1 className="title mt-3">No currencies</h1>
                 }
 
                 {/* Crypto Transactions Table */}

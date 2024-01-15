@@ -1,11 +1,11 @@
 import React from "react";
-import Transactions from "../../interfaces/ITransactions";
+import IPortoflio from "../../interfaces/IPortoflio";
 
-const UserCryptoCurrencies: React.FC<Transactions> = ({ transactions }) => {
-    const onCancelTransaction = () => {
+const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions }) => {
+    const onCancelTransaction = (currency: string, userId?: number) => {
         // Call your function to handle canceling the transaction
         // to do pozovi api da ponisti ovo
-        alert("Cancel transaction");
+        alert(currency + " " + userId);
     };
 
     return (
@@ -21,15 +21,15 @@ const UserCryptoCurrencies: React.FC<Transactions> = ({ transactions }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions.map((transaction) => (
-                        <tr key={transaction.id}>
-                            <td className="has-text-link has-text-weight-bold">{transaction.currency}</td>
-                            <td className="has-text-weight-bold">${transaction.amount_paid_dollars}</td>
+                    {Object.entries(transactions).map(([currencyCode, currencyInfo]) => (
+                        <tr key={currencyInfo.currency}>
+                            <td className="has-text-link has-text-weight-bold">{currencyInfo.currency}</td>
+                            <td className="has-text-weight-bold">${currencyInfo.total_amount}</td>
                             <td>
                                 <button
                                     className="button has-background-danger-dark has-text-white"
                                     style={{ borderRadius: 7 }}
-                                    onClick={onCancelTransaction}
+                                    onClick={() => onCancelTransaction(currencyInfo.currency, currencyInfo.userId)}
                                 >
                                     Remove currency from portfolio
                                 </button>
@@ -37,6 +37,7 @@ const UserCryptoCurrencies: React.FC<Transactions> = ({ transactions }) => {
                         </tr>
                     ))}
                 </tbody>
+
             </table>
         </div>
     );
