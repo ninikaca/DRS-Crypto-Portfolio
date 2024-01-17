@@ -120,3 +120,10 @@ def delete_transcation_by_id(transaction_id):
     except Exception as e:
         db.session.rollback()
         return False
+
+def find_max_id():
+    try:
+        # SELECT COALESCE(MAX(id), 0) FROM transactions;
+        return db.session.query(func.coalesce(func.max(Transaction.id), 0)).scalar()
+    except Exception as e:
+        return 0

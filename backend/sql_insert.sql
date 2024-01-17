@@ -43,3 +43,14 @@ WHERE
 GROUP BY
     type,
     currency;
+
+CREATE TABLE profits
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    type ENUM('profit', 'loss') NOT NULL,
+    summary DECIMAL(10, 10) NOT NULL,
+    CONSTRAINT forkey_user_profit FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+SELECT COALESCE(MAX(id), 0) FROM profits;
