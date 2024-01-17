@@ -70,14 +70,14 @@ const Navbar = () => {
         <div>
             {!loading &&
                 <nav className="navbar" role="navigation" aria-label="main navigation">
-                    <div className="navbar-brand">
+                    <div className="navbar-brand mr-2">
                         <a className="navbar-item" href="/">
                             <img
-                                src="regis.png"
-                                width={35}
-                                height={50}
+                                src="logomain.png"
+                                width={32}
+                                height={32}
                                 alt=""
-                            />
+                            /> &nbsp;&nbsp;<span style={{fontWeight: '500'}}>Crypto Portfolio</span>
                         </a>
                         <a
                             role="button"

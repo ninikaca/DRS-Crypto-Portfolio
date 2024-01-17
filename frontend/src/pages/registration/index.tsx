@@ -5,7 +5,6 @@ import LoginData from '../../interfaces/ILogin';
 import IRegistration from '../../interfaces/IRegistration';
 import Navbar from '../../components/navbar/navbar';
 
-
 const Registration = (): React.JSX.Element => {
   const defaultData: IRegistration = {
     id: '',
@@ -91,8 +90,8 @@ const Registration = (): React.JSX.Element => {
             </a>
           </div>
           <div className="column">
-            <form onSubmit={handleSubmit} className='container' style={{backgroundColor: 'white', padding: 20, paddingLeft:50, paddingRight: 50, borderRadius: 15}}>
-            <h1 style={{fontSize: 62, marginTop: -120, marginBottom: 20}}>Register</h1>
+          <h1 style={{fontSize: 62, marginTop: 0, marginBottom: 40, marginLeft: 60, paddingLeft:50,}}>Register</h1>
+            <form onSubmit={handleSubmit} className='container' style={{backgroundColor: 'white', marginTop: 50, padding: 20, paddingLeft:50, paddingRight: 50, borderRadius: 15}}>
               <div className="field">
                 <label className="label">Name:</label>
                 <div className="control">
@@ -206,7 +205,7 @@ const Registration = (): React.JSX.Element => {
               </div>
               <div className="field mt-2">
                 <div className="control">
-                  <button className="button is-outlined" type="submit">
+                  <button className="button is-info" type="submit">
                     Register
                   </button>
                 </div>
@@ -215,6 +214,7 @@ const Registration = (): React.JSX.Element => {
           </div>
         </div>
       }
+      <br/><br/>
     </div>
 
   );

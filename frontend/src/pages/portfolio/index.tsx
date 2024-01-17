@@ -10,7 +10,6 @@ import Navbar from '../../components/navbar/navbar';
 import UserCryptoCurrencies from "../../components/tables/userCryptoCurrencies";
 import CurrencyInfo from "../../interfaces/ICryptoCurrency";
 import SellCryptoForm from "../../components/forms/sellCrypto";
-import ISummary from "../../interfaces/ISummary";
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -19,7 +18,6 @@ const Portfolio: React.FC = () => {
     const [userId, setUserId] = useState<number>(0);
     const [transactions, setTransactions] = useState<Transaction[]>();
     const [cryptoTransactions, setCryptoTransactions] = useState<CurrencyInfo[]>();
-    const [summary, setSummary] = useState<ISummary>();
 
     const buyCryptoSubmit = async (transaction: Transaction) => {
         transaction.user_id = userId;
@@ -36,7 +34,6 @@ const Portfolio: React.FC = () => {
                 console.log(response.data.data); // to do neku lepu ui poruku
                 fetchTransactions();
                 fetchPortfolio();
-                fetchSummary();
             }
             else {
                 console.warn("Nemere radit")
@@ -64,7 +61,7 @@ const Portfolio: React.FC = () => {
                 console.log(response.data.data); // to do neku lepu ui poruku
                 fetchTransactions();
                 fetchPortfolio();
-                fetchSummary();
+                
             }
             else {
                 console.warn("Nemere radit")
@@ -102,31 +99,6 @@ const Portfolio: React.FC = () => {
         setLoading(false);
     }
 
-    const fetchSummary = async () => {
-        try {
-            setLoading(true);
-            if (userId === 0) return;
-
-            const response: AxiosResponse = await axios.post('http://localhost:5000/api/profit/getSummary', { user_id: userId }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.status === 200) {
-                setSummary(response.data);
-            }
-            else {
-                console.warn("Nemere radit")
-            }
-        }
-        catch
-        {
-            console.warn("Nemere radit exception")
-        }
-        setLoading(false);
-    }
-
     const fetchPortfolio = async () => {
         try {
             setLoading(true);
@@ -152,43 +124,51 @@ const Portfolio: React.FC = () => {
         setLoading(false);
     }
 
-    useEffect(() => {
-        const getUserId = async () => {
-            var user_loggedin: LoginData | null = check_session();
+    const getUserId = async () => {
+        var user_loggedin: LoginData | null = check_session();
 
-            if (user_loggedin) {
-                try {
-                    const response = await axios.post('http://localhost:5000/api/users/get', { email: user_loggedin.email }, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    if (response.status === 200) {
-                        setUserId(response.data.data.id);
-                    }
+        if (user_loggedin) {
+            try {
+                const response = await axios.post('http://localhost:5000/api/users/get', { email: user_loggedin.email }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (response.status === 200) {
+                    setUserId(response.data.data.id);
                 }
-                catch { }
             }
+            catch { }
+        }
+    }
+
+    useEffect(() => {
+        // check session
+        if(check_session() == null) {
+            window.location.href = "/login";
         }
 
-        getUserId();
-        fetchTransactions();
-        fetchPortfolio();
-        fetchSummary();
+        const fetchData = async () => {
+            await getUserId();
+            await fetchTransactions();
+            await fetchPortfolio();
+            
+        };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId]);
-
+    
     return (
-        <main className="wallet-page" style={{paddingBottom: 50}}>
+        <main className="wallet-page" style={{ paddingBottom: 50 }}>
             <div>
                 <Navbar />
                 <div className="hero-body" style={{ margin: 50 }}>
                     <h1 className="title">My Crypto Portfolio</h1>
                     {/* Net Worth and Growth/Decrease Cards */}
                     <div className="columns">
-                        <Card title="Net Worth" subtitle={"$" + (summary?.net_worth ? summary.net_worth.toFixed(2).toString() : "0.0")}/>
-                        <Card title="Summary" subtitle={(summary?.summary ? summary.summary.toFixed(5).toString() : "0.0") + "%"} />
+                        <Card title="Net Worth" user_id={userId} type="net" />
+                        <Card title="Summary" user_id={userId} type="sum" />
                     </div>
 
                     {/* Buy Crypto Button */}
@@ -214,14 +194,13 @@ const Portfolio: React.FC = () => {
                             <div style={{ width: '48%' }}>
                                 <BuyCryptoForm EnteredData={buyCryptoSubmit} CloseForm={() => setShowBuyForm(false)} userId={userId} />
                             </div>
-                        ) : <div style={{ width: '48%' }}></div> }
+                        ) : <div style={{ width: '48%' }}></div>}
                         {showSellForm && (
                             <div style={{ width: '48%' }}>
                                 <SellCryptoForm EnteredData={sellCryptoSubmit} CloseForm={() => setShowSellForm(false)} userId={userId} />
                             </div>
                         )}
                     </div>
-
 
                     {/* Crypto Portoflio */}
                     {loading ? <h1 className="is-size-4 has-text-link-dark mt-5 has-text-weight-normal has-text-centered">Loading your crypto wallet...</h1> :

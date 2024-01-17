@@ -1,4 +1,5 @@
 export interface ICardProps {
     title: string;
-    subtitle: string;
+    user_id: number;
+    type: 'net' | "sum";
 }

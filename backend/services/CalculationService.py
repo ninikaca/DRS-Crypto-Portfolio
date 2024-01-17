@@ -1,5 +1,5 @@
-import schedule
 import time
+import concurrent.futures
 import threading
 from controllers.transaction import find_max_id
 from controllers.profit import calculate_portoflio
@@ -17,18 +17,11 @@ def background_task(app):
 def periodic_task(app):
     def job():
         background_task(app)
-        # global last_transaction_id  # Declare last_transaction_id as global
-        # fetched_transaction_id = find_max_id()
 
-        # if last_transaction_id < fetched_transaction_id:
-        #     background_task(app)
-        #     last_transaction_id = fetched_transaction_id
-
-    schedule.every(10).seconds.do(job)  # Run every 10 seconds
-
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        while True:
+            future = executor.submit(job)
+            time.sleep(5)  # Sleep for 5 seconds before the next iteration
 
 # Start the scheduling in a separate thread
 def start_periodic_task(app):

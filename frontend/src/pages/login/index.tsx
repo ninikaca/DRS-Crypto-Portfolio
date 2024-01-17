@@ -71,36 +71,38 @@ const Login = (): React.JSX.Element => {
         <div className='login-page'>
           <div className='columns mt-5 ml-5'>
 
-          <div className='column' style={{marginLeft:-500}}>
-              
+            <div className='column' style={{ marginLeft: -500 }}>
+
             </div>
             <div className='column'>
               <h1>Welcome to your Crypto Portfolio!</h1>
               <h2>🚀 Track. Manage. Succeed.</h2>
               <a className="login-item" href="/login">
                 <img
+                  loading="lazy"
                   src="cryptohome.png"
                   alt=""
                 />
               </a>
 
             </div>
-            <div className='column' style={{marginTop:450}}>
+            <div className='column' style={{ marginTop: 450 }}>
               <h2>Dive into the world of digital assets with our cutting-edge
                 Crypto Portfolio platform. Whether you're a seasoned trader
                 or a novice investor, we provide you with the tools you need
                 to stay ahead in the dynamic cryptocurrency market.</h2><br></br>
-      
+
               &nbsp;
               <button className="button is-normal is-responsive" onClick={() => { window.location.href = "/portfolio" }}>
-              My Portfolio
+                My Portfolio
               </button>
 
             </div>
 
-            <div className='column' style={{marginTop:-53}}>
+            <div className='column' style={{ marginTop: -53 }}>
               <a href="/portfolio">
                 <img
+                  loading="lazy"
                   src="phone.png"
                   alt="Preview your Crypto wallet!"
                 />
@@ -111,64 +113,65 @@ const Login = (): React.JSX.Element => {
         </div>
 
         :
-        
-          <div className="columns ">
+
+        <div className="columns ">
           <div className="column">
             <a href="/">
               <img
+                loading="lazy"
                 src="regis.png"
                 alt=""
               />
             </a>
           </div>
-          <div className="column">  
-          <form onSubmit={handleSubmit} className='container' style={{backgroundColor: 'white', padding: 20, paddingLeft:50, paddingRight: 50, borderRadius: 15}}>
-          <h1 style={{fontSize: 62, marginTop: -120, marginBottom: 50}}>Log In</h1>
-            <div className="field">
-              <label className="label">Email:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                />
+          <div className="column">
+            <form onSubmit={handleSubmit} className='container' style={{ backgroundColor: 'white', padding: 20, paddingLeft: 50, paddingRight: 50, borderRadius: 15 }}>
+              <h1 style={{ fontSize: 62, marginTop: -120, marginBottom: 50 }}>Log In</h1>
+              <div className="field">
+                <label className="label">Email:</label>
+                <div className="control">
+                  <input
+                    className="input"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="field">
-              <label className="label">Password:</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                />
+              <div className="field">
+                <label className="label">Password:</label>
+                <div className="control">
+                  <input
+                    className="input"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                  />
+                </div>
               </div>
-            </div>
-            <div>
-              {/* Poruka za gresku */}
-              {error !== '' && <h2 className='has-text-danger'>{error}</h2>}
+              <div>
+                {/* Poruka za gresku */}
+                {error !== '' && <h2 className='has-text-danger'>{error}</h2>}
 
-              {/* Poruka o uspesnom dodavanju */}
-              {message !== '' && <h2 className='has-text-success'>{message}</h2>}
-            </div>
-            <div className="field mt-2">
-              <div className="control">
-                <button className="button is-info" type="submit">
-                  Log In
-                </button>
+                {/* Poruka o uspesnom dodavanju */}
+                {message !== '' && <h2 className='has-text-success'>{message}</h2>}
               </div>
-            </div>
-          </form>
-        </div>
+              <div className="field mt-2">
+                <div className="control">
+                  <button className="button is-info" type="submit">
+                    Log In
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       }
-</div>
+    </div>
   );
 };
 

@@ -13,6 +13,7 @@ const Home = (): React.JSX.Element => {
               <img
                 src="home2.png"
                 width={600}
+                loading="lazy"
                 alt=""
               />
             </a>
@@ -41,6 +42,7 @@ const Home = (): React.JSX.Element => {
               <a href="/portfolio">
                 <img
                   src="bit.png"
+                  loading="lazy"
                   width={100}
                   alt=""
                 />
@@ -53,6 +55,7 @@ const Home = (): React.JSX.Element => {
               <a href="/portfolio">
                 <img
                   src="eth.png"
+                  loading="lazy"
                   width={100}
                   alt=""
                 />
@@ -65,6 +68,7 @@ const Home = (): React.JSX.Element => {
               <a href="/portfolio">
                 <img
                   src="teth.png"
+                  loading="lazy"
                   width={100}
                   alt=""
                 />
@@ -77,6 +81,7 @@ const Home = (): React.JSX.Element => {
               <a href="/portfolio">
                 <img
                   src="sol.png"
+                  loading="lazy"
                   width={100}
                   alt=""
                 />
@@ -90,6 +95,7 @@ const Home = (): React.JSX.Element => {
                   <a href="/portfolio">
                     <img
                       src="xrp.png"
+                      loading="lazy"
                       width={100}
                       alt=""
                     />
@@ -102,6 +108,7 @@ const Home = (): React.JSX.Element => {
               <a href="/portfolio">
                 <img
                   src="usdc.png"
+                  loading="lazy"
                   width={100}
                   alt=""
                 />
