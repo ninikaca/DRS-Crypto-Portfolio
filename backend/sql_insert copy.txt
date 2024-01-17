@@ -48,8 +48,8 @@ CREATE TABLE profits
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     type ENUM('profit', 'loss') NOT NULL,
-    summary DECIMAL(10, 10) DEFAULT 0.0 NOT NULL,
-    net_worth DECIMAL(10, 5) DEFAULT 0.0 NOT NULL,
+    summary DECIMAL(20, 10) DEFAULT 0.0 NOT NULL,
+    net_worth DECIMAL(20, 5) DEFAULT 0.0 NOT NULL,
     CONSTRAINT forkey_user_profit FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -65,5 +65,8 @@ CREATE TABLE DifferenceInWorth
 ALTER TABLE DifferenceInWorth MODIFY COLUMN difference DECIMAL(20, 10) NOT NULL;
 
 ALTER TABLE profits ADD COLUMN net_worth DECIMAL(10, 5) DEFAULT 0.0 NOT NULL;
+
+
+ALTER TABLE profits MODIFY COLUMN summary DECIMAL(20, 10) DEFAULT 0.0 NOT NULL;
 
 SELECT COALESCE(MAX(id), 0) FROM profits;

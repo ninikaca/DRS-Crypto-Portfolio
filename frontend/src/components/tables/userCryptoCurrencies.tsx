@@ -49,7 +49,7 @@ const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions, userId, fetc
                         <tr key={currencyInfo.currency}>
                             <td className="has-text-link has-text-weight-bold">{currencyInfo.currency}</td>
                             <td className="has-text-weight-medium">{currencyInfo.total_amount}</td>
-                            <td className="has-text-weight-medium" style={{ display: 'flex', alignItems: 'center' }}>{currencyInfo.difference}
+                            <td className="has-text-weight-medium">{currencyInfo.difference}
                             </td>
                             <td>
                                 {

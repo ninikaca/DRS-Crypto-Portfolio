@@ -5,6 +5,7 @@ from services.CalculationService import start_periodic_task
 from routes.user import users_blueprint
 from routes.currencies import currencies_blueprint
 from routes.transaction import transaction_blueprint
+from routes.profit import profit_blueprint
 
 app = Flask(__name__)
 
@@ -17,6 +18,7 @@ db.init_app(app)
 app.register_blueprint(users_blueprint)
 app.register_blueprint(currencies_blueprint)
 app.register_blueprint(transaction_blueprint)
+app.register_blueprint(profit_blueprint)
 
 # start_periodic_task(app)
 if __name__ == '__main__':

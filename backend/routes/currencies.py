@@ -20,6 +20,7 @@ def get_currency():
     except Exception as e:
         return "Error fetching exchange rates:", 500
 
+# OBRISI OVOO
 @currencies_blueprint.route("/api/rac/", methods=["GET"])
 def lmao():
     from controllers.profit import calculate_portoflio
