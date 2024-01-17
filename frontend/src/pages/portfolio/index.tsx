@@ -10,6 +10,7 @@ import Navbar from '../../components/navbar/navbar';
 import UserCryptoCurrencies from "../../components/tables/userCryptoCurrencies";
 import CurrencyInfo from "../../interfaces/ICryptoCurrency";
 import SellCryptoForm from "../../components/forms/sellCrypto";
+import ISummary from "../../interfaces/ISummary";
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -18,6 +19,7 @@ const Portfolio: React.FC = () => {
     const [userId, setUserId] = useState<number>(0);
     const [transactions, setTransactions] = useState<Transaction[]>();
     const [cryptoTransactions, setCryptoTransactions] = useState<CurrencyInfo[]>();
+    const [summary, setSummary] = useState<ISummary>();
 
     const buyCryptoSubmit = async (transaction: Transaction) => {
         transaction.user_id = userId;
@@ -34,6 +36,7 @@ const Portfolio: React.FC = () => {
                 console.log(response.data.data); // to do neku lepu ui poruku
                 fetchTransactions();
                 fetchPortfolio();
+                fetchSummary();
             }
             else {
                 console.warn("Nemere radit")
@@ -61,6 +64,7 @@ const Portfolio: React.FC = () => {
                 console.log(response.data.data); // to do neku lepu ui poruku
                 fetchTransactions();
                 fetchPortfolio();
+                fetchSummary();
             }
             else {
                 console.warn("Nemere radit")
@@ -86,6 +90,31 @@ const Portfolio: React.FC = () => {
 
             if (response.status === 200) {
                 setTransactions(response.data);
+            }
+            else {
+                console.warn("Nemere radit")
+            }
+        }
+        catch
+        {
+            console.warn("Nemere radit exception")
+        }
+        setLoading(false);
+    }
+
+    const fetchSummary = async () => {
+        try {
+            setLoading(true);
+            if (userId === 0) return;
+
+            const response: AxiosResponse = await axios.post('http://localhost:5000/api/profit/getSummary', { user_id: userId }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 200) {
+                setSummary(response.data);
             }
             else {
                 console.warn("Nemere radit")
@@ -145,6 +174,7 @@ const Portfolio: React.FC = () => {
         getUserId();
         fetchTransactions();
         fetchPortfolio();
+        fetchSummary();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId]);
@@ -157,8 +187,8 @@ const Portfolio: React.FC = () => {
                     <h1 className="title">My Crypto Portfolio</h1>
                     {/* Net Worth and Growth/Decrease Cards */}
                     <div className="columns">
-                        <Card title="Net Worth" subtitle="$1202.223" />
-                        <Card title="Growth/Decrease" subtitle="-$202.223" />
+                        <Card title="Net Worth" subtitle={"$" + (summary?.net_worth ? summary.net_worth.toFixed(2).toString() : "0.0")}/>
+                        <Card title="Summary" subtitle={(summary?.summary ? summary.summary.toFixed(5).toString() : "0.0") + "%"} />
                     </div>
 
                     {/* Buy Crypto Button */}

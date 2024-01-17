@@ -3,3 +3,4 @@ Flask-CORS
 Flask-SQLAlchemy
 mysql-connector-python
 requests
+schedule
