@@ -39,6 +39,7 @@ const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions, userId, fetc
                     <tr>
                         <th>Currency</th>
                         <th>Net worth</th>
+                        <th>Profit / Loss</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -47,6 +48,13 @@ const UserCryptoCurrencies: React.FC<IPortoflio> = ({ transactions, userId, fetc
                         <tr key={currencyInfo.currency}>
                             <td className="has-text-link has-text-weight-bold">{currencyInfo.currency}</td>
                             <td className="has-text-weight-medium">{currencyInfo.total_amount}</td>
+                            <td className="has-text-weight-medium" style={{display: 'flex', alignItems: 'center'}}>{currencyInfo.difference}
+                                {
+                                    currencyInfo.difference < 0.0 ? <img className="ml-2" src="gubitak.png" width={32} height={32} alt=""></img>
+                                        :
+                                        <img className="ml-2" src="dobit.png" width={32} height={32} alt=""></img>
+                                }
+                            </td>
                             <td>
                                 <button
                                     className="button has-background-danger-dark has-text-white"

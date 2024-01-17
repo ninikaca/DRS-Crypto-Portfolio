@@ -19,3 +19,12 @@ def create_difference_entry(new_entry):
         db.session.rollback()
         return False
     
+def get_difference_by_user_id_currency(user_id, currency):
+    try:
+        row = db.session.query(DifferenceInWorth).filter(DifferenceInWorth.user_id == user_id, DifferenceInWorth.currency == currency).scalar()
+        if row is not None:
+            return row.difference
+        else:
+            return 0.0
+    except Exception as e:
+        return 0.0

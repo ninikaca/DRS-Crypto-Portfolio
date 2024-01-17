@@ -1,13 +1,14 @@
 import threading
 import time
 from controllers.transaction import find_max_id
+from controllers.profit import calculate_portoflio
 
 # Function to process transactions
 def background_task(app):
     with app.app_context():
         log_message = 'Updating users portfolios'
         print(f'127.0.0.1 - - [{time.strftime("%d/%b/%Y %H:%M:%S")}] "{log_message}"')
-        # process_on_hold_transactions()
+        calculate_portoflio()
 
 # Periodically run the background task
 def periodic_task(app):

@@ -85,7 +85,7 @@ def get_crypto_currencies_by_user(user_id, is_yesterday=False):
         # sada prolazis redom kroz valute i sabiras sve amount po valuti
         # npr amount 50 i amount 120 za BHD je 170 za BHD
         for transaction in transactions:
-            row_dict = {'currency': transaction[0], 'total_amount': transaction[1], 'type': transaction[2]} # (BHD, 100) --> {'currency': 'BHD', 'total_amount': 100 } - ovo je pajton element recnika!
+            row_dict = {'currency': transaction[0], 'total_amount': transaction[1], 'type': transaction[2], 'difference': 0.0} # (BHD, 100) --> {'currency': 'BHD', 'total_amount': 100 } - ovo je pajton element recnika!
             row_dict['total_amount'] = convert_currency(row_dict['total_amount'], "USD", "EUR") # pretvoris iz dolara u evre zbog kripto apija jer daje sve u evrima tj u odnosu na kurs evra
 
             # sada iz EUR pretvoriti u realno stanje u kriptu
@@ -94,6 +94,11 @@ def get_crypto_currencies_by_user(user_id, is_yesterday=False):
                 row_dict['total_amount'] = convert_crypto_currency(row_dict['total_amount'], row_dict['currency'])
             else:
                 row_dict['total_amount'] = convert_crypto_currency_yesterday(row_dict['total_amount'], row_dict['currency'])
+
+            # povuci difference iz difference tabele baze
+            from controllers.differenceInWorth import get_difference_by_user_id_currency
+
+            row_dict['difference'] = get_difference_by_user_id_currency(user_id, transaction[0])
 
             # ako je kupio ide + na ukupno, u suprotnom prodao znaci oduzima se
             if row_dict['type'] == "sold":
