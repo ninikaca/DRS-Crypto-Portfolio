@@ -19,7 +19,6 @@ app.register_blueprint(currencies_blueprint)
 app.register_blueprint(transaction_blueprint)
 
 # start_periodic_task(app)
-
 if __name__ == '__main__':
     app.run(debug=True) # ovo je zbog docker-a
     # app.run(host='0.0.0.0',debug=True,port='5001') # ovo je zbog docker-a

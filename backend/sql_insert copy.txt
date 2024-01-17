@@ -1,0 +1,69 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    surname VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    number VARCHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE, 
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    date_and_time VARCHAR(30) NOT NULL,
+    type ENUM('bought', 'sold') NOT NULL,
+    currency VARCHAR(5) NOT NULL,
+    amount_paid_dollars DECIMAL(10, 4) NOT NULL,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+SELECT
+    currency,
+    SUM(amount_paid_dollars) AS total_amount
+FROM
+    transactions
+WHERE
+    user_id = :user_id
+GROUP BY
+    currency;
+
+SELECT
+    currency,
+    type,
+    SUM(amount_paid_dollars) AS total_amount
+FROM
+    transactions
+WHERE
+    user_id = :user_id
+    AND currency = :currency
+GROUP BY
+    type,
+    currency;
+
+CREATE TABLE profits
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    type ENUM('profit', 'loss') NOT NULL,
+    summary DECIMAL(10, 10) DEFAULT 0.0 NOT NULL,
+    net_worth DECIMAL(10, 5) DEFAULT 0.0 NOT NULL,
+    CONSTRAINT forkey_user_profit FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE DifferenceInWorth
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    currency VARCHAR(5) NOT NULL,
+    difference DECIMAL(20, 10) DEFAULT 0.0 NOT NULL,
+    CONSTRAINT forkey_difference FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+ALTER TABLE DifferenceInWorth MODIFY COLUMN difference DECIMAL(20, 10) NOT NULL;
+
+ALTER TABLE profits ADD COLUMN net_worth DECIMAL(10, 5) DEFAULT 0.0 NOT NULL;
+
+SELECT COALESCE(MAX(id), 0) FROM profits;

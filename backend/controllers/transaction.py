@@ -72,7 +72,7 @@ def get_transaction_by_user(user_id):
     except Exception as e:
         return None
 
-def get_crypto_currencies_by_user(user_id):
+def get_crypto_currencies_by_user(user_id, is_yesterday=False):
     try:
         # ovo su sql alchemy tuple, znaci ide (valuta, totalno klk ima)
         transactions = db.session.query(Transaction.currency, func.sum(Transaction.amount_paid_dollars), Transaction.type) \
@@ -89,8 +89,11 @@ def get_crypto_currencies_by_user(user_id):
             row_dict['total_amount'] = convert_currency(row_dict['total_amount'], "USD", "EUR") # pretvoris iz dolara u evre zbog kripto apija jer daje sve u evrima tj u odnosu na kurs evra
 
             # sada iz EUR pretvoriti u realno stanje u kriptu
-            from services.cryptoCurrencyConverter import convert_crypto_currency
-            row_dict['total_amount'] = convert_crypto_currency(row_dict['total_amount'], row_dict['currency'])
+            from services.cryptoCurrencyConverter import convert_crypto_currency, convert_crypto_currency_yesterday
+            if not is_yesterday:
+                row_dict['total_amount'] = convert_crypto_currency(row_dict['total_amount'], row_dict['currency'])
+            else:
+                row_dict['total_amount'] = convert_crypto_currency_yesterday(row_dict['total_amount'], row_dict['currency'])
 
             # ako je kupio ide + na ukupno, u suprotnom prodao znaci oduzima se
             if row_dict['type'] == "sold":
