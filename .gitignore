@@ -1,8 +1,14 @@
-# Ignore virtual environment files for Flask API
-/backend/virtualpy/
+# Ignore virtual environment files for Flask backend
+/backend/pyenv/
 __pycache__/
 
-# Ignore the virtual environment for React app
+/backend/controllers/__pycache_/
+/backend/models/__pycache_/
+/backend/routes/__pycache_/
+/backend/services/__pycache_/
+/backend/__pycache_/
+
+# Ignore the virtual environment for React frontend
 /frontend/node_modules/
 /frontend/yarn-error.log
 /frontend/.yarn-integrity
@@ -34,6 +40,7 @@ __pycache__/
 /frontend/.pytest_cache/
 /frontend/coverage/
 /frontend/.nyc_output/
+/frontend/public/
 /frontend/package-lock.json
 /frontend/yarn.lock
 /frontend/.coverage
@@ -52,3 +59,5 @@ __pycache__/
 /frontend/.env.development.local
 /frontend/.env.test.local
 /frontend/.env.production.local
+
+.vscode
