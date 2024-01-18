@@ -6,7 +6,7 @@ currencies_blueprint = Blueprint('currencies_blueprint', __name__)
 @currencies_blueprint.route('/api/currencies/get/rates', methods = ["GET"])
 def get_currency():
     url = "http://api.exchangeratesapi.io/v1/latest"
-    params = {"access_key": "57d102e76d357aaaab5dba8955ffa5a8"}
+    params = {"access_key": "8799e644980339e805115d5bf34915ce"}
 
     headers = {
         "Content-Type": "application/json",
@@ -19,11 +19,3 @@ def get_currency():
         return exchange_rates, 200
     except Exception as e:
         return "Error fetching exchange rates:", 500
-
-# OBRISI OVOO
-@currencies_blueprint.route("/api/rac/", methods=["GET"])
-def lmao():
-    from controllers.profit import calculate_portoflio
-    calculate_portoflio()
-
-    return "ok", 200

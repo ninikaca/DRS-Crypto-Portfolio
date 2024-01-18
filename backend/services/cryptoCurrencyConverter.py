@@ -5,7 +5,7 @@ from services.CachingService import read_cached_data, write_cached_data, is_cach
 
 STATIC_FOLDER = "static"
 CURRENCY_API_BASE_URL = 'http://api.exchangeratesapi.io/v2/'
-ACCESS_KEY = '?access_key=57d102e76d357aaaab5dba8955ffa5a8'
+ACCESS_KEY = '?access_key=8799e644980339e805115d5bf34915ce'
 
 def get_available_crypto_currencies(force_refresh=False): #da osvezi pre isteka 24h
     cached_file = os.path.join(STATIC_FOLDER, "available_crypto_currencies.json")
