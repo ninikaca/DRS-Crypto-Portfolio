@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
 #izmeni ip add na svoju
-SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:123@172.21.64.1:3306/sqlbaza?charset=utf8mb4'
+SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:123@127.0.0.1:3306/sqlbaza?charset=utf8mb4'
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = False
