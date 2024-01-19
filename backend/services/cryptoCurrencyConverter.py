@@ -4,8 +4,7 @@ from datetime import datetime, timedelta
 from services.CachingService import read_cached_data, write_cached_data, is_cache_valid
 
 STATIC_FOLDER = "static"
-CURRENCY_API_BASE_URL = 'http://api.exchangeratesapi.io/v2/'
-ACCESS_KEY = '?access_key=8799e644980339e805115d5bf34915ce'
+CURRENCY_API_BASE_URL = 'https://currency-exchange-api-six.vercel.app/api/v2/currencies/'
 
 def get_available_crypto_currencies(force_refresh=False): #da osvezi pre isteka 24h
     cached_file = os.path.join(STATIC_FOLDER, "available_crypto_currencies.json")
@@ -15,7 +14,7 @@ def get_available_crypto_currencies(force_refresh=False): #da osvezi pre isteka 
         if data:
             return data.get("rates", {})
 
-    data = requests.get(CURRENCY_API_BASE_URL + "latest" + ACCESS_KEY).json()
+    data = requests.get(CURRENCY_API_BASE_URL + "today").json()
     write_cached_data(cached_file, data)
 
     return data.get('rates', {})
@@ -57,10 +56,7 @@ def get_available_crypto_currencies_yesterday(force_refresh=False): #da osvezi p
         if data:
             return data.get("rates", {})
 
-    # racuna dan pre i vraca u formatu dan-mesec-godina
-    yesterday_date_string = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-
-    data = requests.get(CURRENCY_API_BASE_URL + yesterday_date_string + ACCESS_KEY).json()
+    data = requests.get(CURRENCY_API_BASE_URL + "yesterday").json()
     write_cached_data(cached_file, data)
 
     return data.get('rates', {})

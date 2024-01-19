@@ -23,5 +23,5 @@ app.register_blueprint(profit_blueprint)
 start_periodic_task(app) # run portfolio calculation
 
 if __name__ == '__main__':
-   #app.run(debug=True) # ovo je zbog docker-a
-    app.run(host='0.0.0.0',debug=True,port='5000') # ovo je zbog docker-a
+   # app.run(debug=True) # ovo je zbog docker-a
+   app.run(host='0.0.0.0',debug=True,port='5000') # ovo je zbog docker-a

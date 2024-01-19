@@ -9,6 +9,7 @@ def create(transaction):
         db.session.commit()
         return True
     except Exception as e:
+        print(e)
         db.session.rollback()
         return False
 
@@ -25,6 +26,7 @@ def delete_crypto(user_id, currency):
         db.session.commit()
         return True
     except Exception as e:
+        print(e)
         db.session.rollback()
         return False
 
@@ -81,13 +83,13 @@ def get_crypto_currencies_by_user(user_id, is_yesterday=False):
                         .all()
         
         portfolio = {}
-
+        
         # sada prolazis redom kroz valute i sabiras sve amount po valuti
         # npr amount 50 i amount 120 za BHD je 170 za BHD
         for transaction in transactions:
             row_dict = {'currency': transaction[0], 'total_amount': transaction[1], 'type': transaction[2], 'difference': 0.0} # (BHD, 100) --> {'currency': 'BHD', 'total_amount': 100 } - ovo je pajton element recnika!
             row_dict['total_amount'] = convert_currency(row_dict['total_amount'], "USD", "EUR") # pretvoris iz dolara u evre zbog kripto apija jer daje sve u evrima tj u odnosu na kurs evra
-
+            
             # sada iz EUR pretvoriti u realno stanje u kriptu
             from services.cryptoCurrencyConverter import convert_crypto_currency, convert_crypto_currency_yesterday
             if not is_yesterday:
@@ -113,6 +115,8 @@ def get_crypto_currencies_by_user(user_id, is_yesterday=False):
         
         return portfolio
     except Exception as e:
+        from traceback import print_exc
+        print_exc()
         return None
 
 def delete_transcation_by_id(transaction_id):
@@ -126,6 +130,7 @@ def delete_transcation_by_id(transaction_id):
         db.session.commit()
         return True
     except Exception as e:
+        print(e)
         db.session.rollback()
         return False
 

@@ -16,6 +16,7 @@ def create_difference_entry(new_entry):
 
         return True
     except Exception as e:
+        print(e)
         db.session.rollback()
         return False
     

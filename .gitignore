@@ -2,6 +2,7 @@
 /backend/pyenv/
 __pycache__/
 
+/static/
 /backend/controllers/__pycache_/
 /backend/models/__pycache_/
 /backend/routes/__pycache_/

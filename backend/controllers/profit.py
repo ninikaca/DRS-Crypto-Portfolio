@@ -3,7 +3,6 @@ from models.profit import Profit
 from models.differenceInWorth import DifferenceInWorth
 from controllers.transaction import get_crypto_currencies_by_user, get_transaction_by_user
 from controllers.differenceInWorth import create_difference_entry
-from sqlalchemy.sql import func
 from decimal import Decimal, getcontext
 
 getcontext().prec = 20
@@ -23,6 +22,7 @@ def create_entry(new_entry):
         db.session.commit()
         return True
     except Exception as e:
+        print(e)
         db.session.rollback()
         return False
     
@@ -53,6 +53,11 @@ def calculate_portoflio():
 
                 ukupna_vrednost_dolari_juce = 0.0
                 ukupna_vrednost_dolari_danas = 0.0
+
+                # print("===================================")
+                # print(user_crypto_portfolio_today)
+                # print(user_crypto_portfolio_yesterday)
+                # print("==============================")
 
                 # redosled u oba recnika je isti!
                 # u tabelu worthdifference upisati nove vrednosti
@@ -102,6 +107,8 @@ def calculate_portoflio():
 
         db.session.commit()
     except Exception as e:
+        from traceback import print_exc
+        print_exc()
         db.session.rollback()
 
 def get_summary_by_user_id(user_id):
