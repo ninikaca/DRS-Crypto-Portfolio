@@ -4,6 +4,8 @@ import { check_session, end_session } from '../../session/session-manager';
 import LoginData from '../../interfaces/ILogin';
 import IRegistration from '../../interfaces/IRegistration';
 import Navbar from '../../components/navbar/navbar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Change = (): React.JSX.Element => {
   const defaultData: IRegistration = {
@@ -48,21 +50,21 @@ const Change = (): React.JSX.Element => {
       });
 
       if (response.status === 200) {
-        setMessage(response.data.data);       
+        toast.success(response.data.data);
       } else {
-        setError(response.data.data); // axiosresponse ima request, response, data,
+        toast.error(response.data.data); // axiosresponse ima request, response, data,
         // kako smo mi slali jsonify({data: poruka}), bice respone.data pa nas data response.data.data
       }
     } catch (error: any) {
       if (error.response) {
         // The request was made and the server responded with a status code that falls out of the range of 2xx
-        setError(error.response.data.data); // Axios response has request, response, data properties
+        toast.error(error.response.data.data); // Axios response has request, response, data properties
       } else if (error.request) {
         // The request was made but no response was received
-        setError('No response received from the server');
+        toast.error('No response received from the server');
       } else {
         // Something happened in setting up the request that triggered an error
-        setError(error.message);
+        toast.error(error.message);
       }
     }
   };
@@ -119,6 +121,7 @@ const Change = (): React.JSX.Element => {
   return (
     <div>
       <Navbar />
+      <ToastContainer />
       {/* ternarni operator, uslovno renderovanje, osnove reactjs --> google or ig posts */}
       {loadedUser != null &&
         <div>
