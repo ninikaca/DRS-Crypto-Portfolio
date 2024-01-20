@@ -61,7 +61,7 @@ const Change = (): React.JSX.Element => {
         toast.error(error.response.data.data); // Axios response has request, response, data properties
       } else if (error.request) {
         // The request was made but no response was received
-        toast.error('No response received from the server');
+        toast.error('No response received from the server.');
       } else {
         // Something happened in setting up the request that triggered an error
         toast.error(error.message);
@@ -110,6 +110,7 @@ const Change = (): React.JSX.Element => {
       } catch (error) {
         // Handle errors, if any, during the user fetch process
         console.error("Error fetching user:", error);
+        toast.error('Error fetching user.');
         logout(); // Log out the user in case of an error during fetch
       }
     }

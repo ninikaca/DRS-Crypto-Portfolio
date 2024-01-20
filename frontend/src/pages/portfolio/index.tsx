@@ -10,6 +10,8 @@ import Navbar from '../../components/navbar/navbar';
 import UserCryptoCurrencies from "../../components/tables/userCryptoCurrencies";
 import CurrencyInfo from "../../interfaces/ICryptoCurrency";
 import SellCryptoForm from "../../components/forms/sellCrypto";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Portfolio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -31,16 +33,19 @@ const Portfolio: React.FC = () => {
             });
 
             if (response.status === 201) {
+                toast.success('Successfully bought!');
                 console.log(response.data.data); // to do neku lepu ui poruku
                 fetchTransactions();
                 fetchPortfolio();
             }
             else {
+                toast.error('No response received from the server.');
                 console.warn("Nemere radit")
             }
         }
         catch
         {
+            toast.error('Exception: Unable to buy at the moment.');
             console.warn("Nemere radit exception")
         }
 
@@ -64,11 +69,13 @@ const Portfolio: React.FC = () => {
                 
             }
             else {
+                toast.error('No response received from the server.');
                 console.warn("Nemere radit")
             }
         }
         catch
         {
+            toast.error('Unable to sell because you do not own that currency.');
             console.warn("Nemere radit exception")
         }
 
@@ -89,11 +96,13 @@ const Portfolio: React.FC = () => {
                 setTransactions(response.data);
             }
             else {
+                toast.warn('Unable to get the transaction.');
                 console.warn("Nemere radit")
             }
         }
         catch
         {
+            toast.warn('Transaction unsuccessfull.');
             console.warn("Nemere radit exception")
         }
         setLoading(false);
@@ -114,11 +123,13 @@ const Portfolio: React.FC = () => {
                 setCryptoTransactions(response.data);
             }
             else {
+                toast.warn('Portfolio not loaded.');
                 console.warn("Nemere radit")
             }
         }
         catch
         {
+            toast.warn('Portfolio does not exist.');
             console.warn("Nemere radit exception")
         }
         setLoading(false);
@@ -163,6 +174,7 @@ const Portfolio: React.FC = () => {
         <main className="wallet-page" style={{ paddingBottom: 50 }}>
             <div>
                 <Navbar />
+                <ToastContainer />
                 <div className="hero-body" style={{ margin: 50 }}>
                     <h1 className="title">My Crypto Portfolio</h1>
                     {/* Net Worth and Growth/Decrease Cards */}
