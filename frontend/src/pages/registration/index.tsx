@@ -80,7 +80,7 @@ const Registration = (): React.JSX.Element => {
       <Navbar />
       {/* ternarni operator, uslovno renderovanje, osnove reactjs --> google or ig posts */}
       {user == null &&
-        <div className="columns ">
+        <div className="columns">
           <div className="column">
             <a href="/">
               <img
@@ -91,7 +91,7 @@ const Registration = (): React.JSX.Element => {
           </div>
           <div className="column">
           <h1 style={{fontSize: 62, marginTop: 0, marginBottom: 40, marginLeft: 60, paddingLeft:50,}}>Register</h1>
-            <form onSubmit={handleSubmit} className='container' style={{backgroundColor: 'white', marginTop: 50, padding: 20, paddingLeft:50, paddingRight: 50, borderRadius: 15}}>
+            <form onSubmit={handleSubmit} className='container' style={{backgroundColor: 'white', marginTop: 20, padding: 20, paddingLeft:50, paddingRight: 50, borderRadius: 15}}>
               <div className="field">
                 <label className="label">Name:</label>
                 <div className="control">

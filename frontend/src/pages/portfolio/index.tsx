@@ -70,13 +70,13 @@ const Portfolio: React.FC = () => {
                 
             }
             else {
-                toast.error('No response received from the server.');
+                toast.error('Unable to sell.');
                 console.warn("Nemere radit")
             }
         }
         catch
         {
-            toast.error('Unable to sell because you do not own that currency.');
+            toast.error('Unable to sell.');
             console.warn("Nemere radit exception")
         }
 
@@ -97,13 +97,13 @@ const Portfolio: React.FC = () => {
                 setTransactions(response.data);
             }
             else {
-                toast.warn('Unable to get the transaction.');
+                setTransactions([]);
                 console.warn("Nemere radit")
             }
         }
         catch
         {
-            toast.warn('Transaction unsuccessfull.');
+            setTransactions([]);
             console.warn("Nemere radit exception")
         }
         setLoading(false);
@@ -124,13 +124,13 @@ const Portfolio: React.FC = () => {
                 setCryptoTransactions(response.data);
             }
             else {
-                toast.warn('Portfolio not loaded.');
+                setCryptoTransactions([]);
                 console.warn("Nemere radit")
             }
         }
         catch
         {
-            toast.warn('Portfolio does not exist.');
+            setCryptoTransactions([]);
             console.warn("Nemere radit exception")
         }
         setLoading(false);

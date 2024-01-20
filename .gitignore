@@ -9,6 +9,7 @@ __pycache__/
 /backend/services/__pycache_/
 /backend/__pycache_/
 /backend/virtualpy/
+/backend/venv/
 
 # Ignore the virtual environment for React frontend
 /frontend/node_modules/

@@ -17,16 +17,14 @@ def delete_crypto(user_id, currency):
     try:
         transactions = db.session.query(Transaction).filter(Transaction.user_id == user_id, Transaction.currency == currency).all()
 
-        if not transactions:
-            return False
-        
         for transaction in transactions:
             db.session.delete(transaction)
 
         db.session.commit()
         return True
     except Exception as e:
-        print(e)
+        from traceback import print_exc
+        print_exc()
         db.session.rollback()
         return False
 
