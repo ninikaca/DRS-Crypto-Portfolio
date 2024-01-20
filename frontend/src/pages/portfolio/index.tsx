@@ -63,6 +63,7 @@ const Portfolio: React.FC = () => {
             });
 
             if (response.status === 201) {
+                toast.success('Successfully sold!');
                 console.log(response.data.data); // to do neku lepu ui poruku
                 fetchTransactions();
                 fetchPortfolio();
