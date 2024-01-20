@@ -1,7 +1,5 @@
-# DRS-Crypto-Portfolio
+## DRS-Crypto-Portfolio
 
-
-## Sadrzaj
 - [About the Project](#about-the-project)
 - [Used Technologies](#used-technologies)
 - [Aplication layout](#aplication-layout)
